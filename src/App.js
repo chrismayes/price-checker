@@ -1,35 +1,32 @@
-import './App.css';
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from './firebase';
 
 function App() {
-  const [docData, setDocData] = useState(null);
+  const [docsData, setDocsData] = useState([]);
 
   useEffect(() => {
-    const docRef = doc(db, 'example', 'lC4cVAQgvWO68NALqfQ0');
-    getDoc(docRef)
-      .then((docSnap) => {
-        if (docSnap.exists()) {
-          setDocData(docSnap.data());
-        } else {
-          console.log('No such document!');
-        }
-      })
-      .catch((error) => {
-        console.error('Error getting document:', error);
-      });
+    async function fetchData() {
+      try {
+        // Replace 'yourCollection' with your actual collection name
+        const querySnapshot = await getDocs(collection(db, 'example'));
+        const docs = [];
+        querySnapshot.forEach((doc) => {
+          docs.push({ id: doc.id, ...doc.data() });
+        });
+        setDocsData(docs);
+      } catch (error) {
+        console.error("Error getting documents: ", error);
+      }
+    }
+
+    fetchData();
   }, []);
 
   return (
     <div>
-      <h1>Document Data</h1>
-      {docData ? (
-        // Display the document data as formatted JSON
-        <pre>{JSON.stringify(docData, null, 2)}</pre>
-      ) : (
-        <p>Loading document...</p>
-      )}
+      <h1>Documents Data</h1>
+      <pre>{JSON.stringify(docsData, null, 2)}</pre>
     </div>
   );
 }
