@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, DocumentData } from 'firebase/firestore';
 import { db } from './firebase';
 
-function App() {
-  const [docsData, setDocsData] = useState([]);
+interface DocData extends DocumentData {
+  id: string;
+}
+
+const App: React.FC = () => {
+  const [docsData, setDocsData] = useState<DocData[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
         // Replace 'yourCollection' with your actual collection name
         const querySnapshot = await getDocs(collection(db, 'example'));
-        const docs = [];
+        const docs: DocData[] = [];
         querySnapshot.forEach((doc) => {
           docs.push({ id: doc.id, ...doc.data() });
         });
