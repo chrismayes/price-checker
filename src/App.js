@@ -1,23 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from './firebase';
 
 function App() {
+  const [docData, setDocData] = useState(null);
+
+  useEffect(() => {
+    const docRef = doc(db, 'example', 'lC4cVAQgvWO68NALqfQ0');
+    getDoc(docRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          setDocData(docSnap.data());
+        } else {
+          console.log('No such document!');
+        }
+      })
+      .catch((error) => {
+        console.error('Error getting document:', error);
+      });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Document Data</h1>
+      {docData ? (
+        // Display the document data as formatted JSON
+        <pre>{JSON.stringify(docData, null, 2)}</pre>
+      ) : (
+        <p>Loading document...</p>
+      )}
     </div>
   );
 }
