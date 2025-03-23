@@ -1,0 +1,12 @@
+.videoContainer {
+  width: 100%;
+  height: 50vh;
+  margin: auto;
+  /* You can add additional styles as needed */
+}
+
+@media (max-width: 768px) {
+  .videoContainer {
+    height: 30vh; /* Adjust this value for mobile devices */
+  }
+}
