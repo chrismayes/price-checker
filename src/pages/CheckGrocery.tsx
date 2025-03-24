@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Container, Typography, Button, Box, Modal } from '@mui/material';
 import Quagga from 'quagga';
 import './CheckGrocery.css';
@@ -14,7 +14,7 @@ const CheckGrocery: React.FC = () => {
   const hasDetected = useRef(false);
 
   // Initialize Quagga and attach to the video container
-  const initQuagga = () => {
+  const initQuagga = useCallback(() => {
     if (videoRef.current) {
       console.log('Initializing Quagga...');
       Quagga.init(
@@ -40,7 +40,6 @@ const CheckGrocery: React.FC = () => {
           quaggaStarted.current = true;
           Quagga.start();
           console.log('Quagga started, scanning...');
-          // Allow time for the video element to be created, then set attributes for iOS Safari
           setTimeout(() => {
             const videoElem = videoRef.current?.querySelector('video');
             if (videoElem) {
@@ -67,14 +66,13 @@ const CheckGrocery: React.FC = () => {
           hasDetected.current = true;
           Quagga.stop();
           setScanning(false);
-          // After stopping scanning, call the backend to fetch product data
           fetchProductData(detectedCode);
         }
       });
     } else {
       console.error('Video ref is not defined');
     }
-  };
+  }, []);  // Empty array since the function uses refs only (no changing state or props)
 
   // Start scanning by opening the modal
   const startScanning = () => {
@@ -142,7 +140,7 @@ const CheckGrocery: React.FC = () => {
       }
       Quagga.offDetected();
     };
-  }, [scanning]);
+  }, [scanning, initQuagga]);
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
