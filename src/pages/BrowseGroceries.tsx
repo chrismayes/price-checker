@@ -59,7 +59,7 @@ const BrowseGroceries: React.FC = () => {
 
   useEffect(() => {
     fetchGroceries();
-  }, [apiUrl]);
+  }, [apiUrl, fetchGroceries]);
 
   // View Modal handlers
   const openViewModal = (grocery: Grocery) => {
