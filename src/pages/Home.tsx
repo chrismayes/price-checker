@@ -15,11 +15,6 @@ const Home: React.FC = () => {
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
-          <ListItemButton component={RouterLink} to="/add">
-            <ListItemText primary="Add a Grocery" />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
           <ListItemButton component={RouterLink} to="/check">
             <ListItemText primary="Check a Grocery" />
           </ListItemButton>

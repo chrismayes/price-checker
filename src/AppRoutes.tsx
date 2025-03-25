@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import BrowseGroceries from './pages/BrowseGroceries';
-import AddGrocery from './pages/AddGrocery';
 import CheckGrocery from './pages/CheckGrocery';
 import BreadcrumbsNav from './components/BreadcrumbsNav';
 
@@ -14,7 +13,6 @@ const AppRoutes: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/browse" element={<BrowseGroceries />} />
-        <Route path="/add" element={<AddGrocery />} />
         <Route path="/check" element={<CheckGrocery />} />
       </Routes>
     </>
