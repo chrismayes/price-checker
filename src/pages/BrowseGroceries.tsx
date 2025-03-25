@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container, Typography, List, ListItem, ListItemText, CircularProgress,
   Avatar, ListItemAvatar, Modal, Box, Button, TextField, Grid, IconButton
@@ -43,7 +43,7 @@ const BrowseGroceries: React.FC = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  const fetchGroceries = async () => {
+  const fetchGroceries = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`${apiUrl}/api/groceries/`);
@@ -55,11 +55,11 @@ const BrowseGroceries: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiUrl]);
 
   useEffect(() => {
     fetchGroceries();
-  }, [apiUrl, fetchGroceries]);
+  }, [fetchGroceries]);
 
   // View Modal handlers
   const openViewModal = (grocery: Grocery) => {
