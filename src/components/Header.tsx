@@ -8,6 +8,8 @@ import { jwtDecode } from 'jwt-decode';
 
 interface TokenPayload {
   username: string;
+  first_name: string;
+  last_name: string;
   email: string;
 }
 
@@ -16,11 +18,11 @@ const Header: React.FC = () => {
 
   // Try to retrieve and decode the token
   const token = localStorage.getItem('access_token');
-  let username: string | null = null;
+  let firstName: string | null = null;
   if (token) {
     try {
       const decoded = jwtDecode<TokenPayload>(token);
-      username = decoded.username;
+      firstName = decoded.first_name || decoded.username;
     } catch (error) {
       console.error('Token decode error:', error);
     }
@@ -61,7 +63,7 @@ const Header: React.FC = () => {
         </Box>
 
         {/* Right Section: User Controls */}
-        {token && username && (
+        {token && firstName && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button
               color="inherit"
@@ -75,7 +77,7 @@ const Header: React.FC = () => {
               }}
             >
               <PersonIcon sx={{ mr: 0.5 }} />
-              {username}
+              {firstName}
             </Button>
             <IconButton color="inherit" onClick={handleLogout}>
               <LogoutIcon />

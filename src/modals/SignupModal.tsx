@@ -10,16 +10,19 @@ interface SignupModalProps {
 const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  // Clear form when modal is closed
   useEffect(() => {
     if (!open) {
       setUsername('');
       setEmail('');
+      setFirstName('');
+      setLastName('');
       setPassword('');
       setConfirmPassword('');
       setError(null);
@@ -45,6 +48,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
         body: JSON.stringify({
           username,
           email,
+          first_name: firstName,
+          last_name: lastName,
           password,
         }),
       });
@@ -52,7 +57,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
       if (!response.ok) {
         const data = await response.json();
         let errorMessage = "Signup failed.";
-        // If data is an object with field errors, format them.
         if (data && typeof data === "object") {
           errorMessage = Object.entries(data)
             .map(([field, errors]) => {
@@ -104,50 +108,75 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
             {success}
           </Alert>
         )}
-        <form onSubmit={handleSignup}>
-          <TextField
-            label="Username"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <TextField
-            label="Password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <TextField
-            label="Confirm Password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
-            Sign Up
+        {success ? (
+          // If signup is successful, show a close button
+          <Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>
+            Close
           </Button>
-        </form>
+        ) : (
+          <form onSubmit={handleSignup}>
+            <TextField
+              label="Username"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              type="email"
+              fullWidth
+              margin="normal"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <TextField
+              label="First Name"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              required
+            />
+            <TextField
+              label="Last Name"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              required
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <TextField
+              label="Confirm Password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
+              Sign Up
+            </Button>
+          </form>
+        )}
       </Box>
     </Modal>
   );

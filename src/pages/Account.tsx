@@ -4,8 +4,9 @@ import { jwtDecode } from 'jwt-decode';
 
 interface TokenPayload {
   username: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  // Add additional fields if your token includes them.
 }
 
 const Account: React.FC = () => {
@@ -28,14 +29,17 @@ const Account: React.FC = () => {
         {payload ? (
           <Box>
             <Typography variant="body1">
+              <strong>First Name:</strong> {payload.first_name}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Last Name:</strong> {payload.last_name}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Email:</strong> {payload.email}
+            </Typography>
+            <Typography variant="body1">
               <strong>Username:</strong> {payload.username}
             </Typography>
-            {payload.email && (
-              <Typography variant="body1">
-                <strong>Email:</strong> {payload.email}
-              </Typography>
-            )}
-            {/* You can add additional account details here */}
           </Box>
         ) : (
           <Typography variant="body1">
