@@ -53,7 +53,7 @@ const Header: React.FC = () => {
           </Box>
           {/* Header Text and Breadcrumbs */}
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: 2 }}>
-            <Typography variant="h4" component="div" sx={{ fontFamily: 'Lobster2, cursive' }}>
+            <Typography variant="h3" component="div" sx={{ fontFamily: '"Lobster Two", cursive' }}>
               Grocery Price Checker
             </Typography>
             <BreadcrumbsNav />
