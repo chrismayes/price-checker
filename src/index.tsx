@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom/client'; // note the /client import
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import './App.css';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#9CAF88',
+      contrastText: '#ffffff',
     },
     secondary: {
       main: '#dc004e',

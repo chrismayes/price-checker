@@ -1,0 +1,70 @@
+import React from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import BreadcrumbsNav from './BreadcrumbsNav';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PersonIcon from '@mui/icons-material/Person';
+import { jwtDecode } from 'jwt-decode';
+
+interface TokenPayload {
+  username: string;
+  email: string;
+}
+
+const Header: React.FC = () => {
+  const navigate = useNavigate();
+
+  // Try to retrieve and decode the token
+  const token = localStorage.getItem('access_token');
+  let username: string | null = null;
+  if (token) {
+    try {
+      const decoded = jwtDecode<TokenPayload>(token);
+      username = decoded.username;
+    } catch (error) {
+      console.error('Token decode error:', error);
+    }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    navigate('/login');
+  };
+
+  return (
+    <AppBar position="static" color="primary">
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Typography variant="h4" component="div">
+          Grocery Price Checker
+        </Typography>
+        {token && username ? (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Button
+              color="inherit"
+              component={RouterLink}
+              to="/account"
+              sx={{
+                textTransform: 'none',
+                mr: 1,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <PersonIcon sx={{ mr: 0.5 }} />
+              {username}
+            </Button>
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
+          </div>
+        ) : null}
+      </Toolbar>
+      <Toolbar variant="dense">
+        <BreadcrumbsNav />
+      </Toolbar>
+    </AppBar>
+  );
+};
+
+export default Header;
