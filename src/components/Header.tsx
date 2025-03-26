@@ -1,5 +1,15 @@
+// src/components/Header.tsx
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from '@mui/material';
 import BreadcrumbsNav from './BreadcrumbsNav';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -15,13 +25,15 @@ interface TokenPayload {
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  // Try to retrieve and decode the token
+  // Retrieve and decode token if available
   const token = localStorage.getItem('access_token');
   let firstName: string | null = null;
   if (token) {
     try {
-      const decoded = jwtDecode<TokenPayload>(token);
+      const decoded = jwtDecode(token) as TokenPayload;
       firstName = decoded.first_name || decoded.username;
     } catch (error) {
       console.error('Token decode error:', error);
@@ -36,33 +48,27 @@ const Header: React.FC = () => {
 
   return (
     <AppBar position="static" color="primary">
-      <Toolbar
-        sx={{
-          justifyContent: 'space-between',
-          alignItems: 'stretch',
-          flexWrap: 'wrap'
-        }}
-      >
-        {/* Left Section: Logo, Header Text, and Breadcrumbs */}
-        <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
-          {/* Logo */}
-          <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-            <img
-              src="/images/logo-image.png"
-              alt="Logo"
-              style={{ height: '100%', maxHeight: '100px', objectFit: 'contain' }}
-            />
-          </Box>
-          {/* Header Text and Breadcrumbs */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: 2 }}>
-            <Typography variant="h3" component="div" sx={{ fontFamily: '"Lobster Two", cursive' }}>
-              Grocery Price Checker
-            </Typography>
-            <BreadcrumbsNav />
-          </Box>
+      {/* Top Toolbar: Logo and Header Text */}
+      <Toolbar sx={{ justifyContent: 'flex-start' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+          <img
+            src="/images/logo-image.png"
+            alt="Logo"
+            style={isMobile ? { height: '100%', maxHeight: '70px', objectFit: 'contain' } :
+                              { height: '100%', maxHeight: '100px', objectFit: 'contain' }}
+          />
         </Box>
-
-        {/* Right Section: User Controls */}
+        <Typography
+          variant={isMobile ? "h4" : "h3"}
+          component="div"
+          sx={{ fontFamily: '"Lobster Two", cursive' }}
+        >
+          Grocery Price Checker
+        </Typography>
+      </Toolbar>
+      {/* Dense Toolbar: Breadcrumbs left; Account link & Logout right */}
+      <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
+        <BreadcrumbsNav />
         {token && firstName && (
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button
@@ -71,13 +77,13 @@ const Header: React.FC = () => {
               to="/account"
               sx={{
                 textTransform: 'none',
-                mr: 1,
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                mr: 1,
               }}
             >
-              <PersonIcon sx={{ mr: 0.5 }} />
-              {firstName}
+              <PersonIcon sx={{ mr: isMobile ? 0 : 0.5 }} />
+              {!isMobile && firstName}
             </Button>
             <IconButton color="inherit" onClick={handleLogout}>
               <LogoutIcon />

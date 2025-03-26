@@ -9,7 +9,6 @@ const BreadcrumbsNav: React.FC = () => {
   return (
     <Breadcrumbs
       aria-label="breadcrumb"
-      sx={{ mb: 2 }}
       separator={<span style={{ color: 'white' }}>/</span>}
     >
       <Link component={RouterLink} underline="hover" color="white" to="/">
