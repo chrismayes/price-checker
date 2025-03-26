@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Button, Box } from '@mui/material';
 import BreadcrumbsNav from './BreadcrumbsNav';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -34,12 +34,35 @@ const Header: React.FC = () => {
 
   return (
     <AppBar position="static" color="primary">
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography variant="h4" component="div">
-          Grocery Price Checker
-        </Typography>
-        {token && username ? (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+      <Toolbar
+        sx={{
+          justifyContent: 'space-between',
+          alignItems: 'stretch',
+          flexWrap: 'wrap'
+        }}
+      >
+        {/* Left Section: Logo, Header Text, and Breadcrumbs */}
+        <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
+          {/* Logo */}
+          <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+            <img
+              src="/images/logo-image.png"
+              alt="Logo"
+              style={{ height: '100%', maxHeight: '100px', objectFit: 'contain' }}
+            />
+          </Box>
+          {/* Header Text and Breadcrumbs */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mt: 2 }}>
+            <Typography variant="h4" component="div" sx={{ fontFamily: 'Lobster2, cursive' }}>
+              Grocery Price Checker
+            </Typography>
+            <BreadcrumbsNav />
+          </Box>
+        </Box>
+
+        {/* Right Section: User Controls */}
+        {token && username && (
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button
               color="inherit"
               component={RouterLink}
@@ -48,7 +71,7 @@ const Header: React.FC = () => {
                 textTransform: 'none',
                 mr: 1,
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'center'
               }}
             >
               <PersonIcon sx={{ mr: 0.5 }} />
@@ -57,11 +80,8 @@ const Header: React.FC = () => {
             <IconButton color="inherit" onClick={handleLogout}>
               <LogoutIcon />
             </IconButton>
-          </div>
-        ) : null}
-      </Toolbar>
-      <Toolbar variant="dense">
-        <BreadcrumbsNav />
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
   );

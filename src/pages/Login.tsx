@@ -1,13 +1,23 @@
 // src/pages/Login.tsx
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Link, Box, Alert } from '@mui/material';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Link,
+  Box,
+  Alert,
+} from '@mui/material';
 import SignupModal from '../modals/SignupModal';
+import ForgotPasswordModal from '../modals/ForgotPasswordModal';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [signupModalOpen, setSignupModalOpen] = useState(false);
+  const [forgotModalOpen, setForgotModalOpen] = useState(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,12 +68,23 @@ const Login: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" color="primary" type="submit" sx={{ mt: 2 }} fullWidth>
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ mt: 2 }}
+          fullWidth
+        >
           Login
         </Button>
       </form>
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-        <Link href="/forgot-password" underline="hover">
+        <Link
+          component="button"
+          variant="body2"
+          underline="hover"
+          onClick={() => setForgotModalOpen(true)}
+        >
           Forgot Password?
         </Link>
         <Link
@@ -75,7 +96,14 @@ const Login: React.FC = () => {
           Sign Up
         </Link>
       </Box>
-      <SignupModal open={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
+      <SignupModal
+        open={signupModalOpen}
+        onClose={() => setSignupModalOpen(false)}
+      />
+      <ForgotPasswordModal
+        open={forgotModalOpen}
+        onClose={() => setForgotModalOpen(false)}
+      />
     </Container>
   );
 };
