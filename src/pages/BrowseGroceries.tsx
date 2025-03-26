@@ -1,25 +1,13 @@
+// src/pages/BrowseGroceries.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container, Typography, List, ListItem, ListItemText, CircularProgress,
-  Avatar, ListItemAvatar, Modal, Box, Button, TextField, Grid, IconButton
+  Avatar, ListItemAvatar, Button, Grid, IconButton
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-
-interface Grocery {
-  id: number;
-  barcode_number?: string;
-  name: string;
-  description?: string;
-  category?: string;
-  brand?: string;
-  size?: string;
-  image_url?: string;
-  store_name?: string;
-  store_price?: string;
-  manually_entered: boolean;
-  barcode_lookup_failed: boolean;
-  created_at: string;
-}
+import ViewGroceryModal, { Grocery } from '../modals/ViewGroceryModal';
+import AddGroceryModal from '../modals/AddGroceryModal';
+import DeleteConfirmationModal from '../modals/DeleteConfirmationModal';
 
 const BrowseGroceries: React.FC = () => {
   const [groceries, setGroceries] = useState<Grocery[]>([]);
@@ -176,6 +164,8 @@ const BrowseGroceries: React.FC = () => {
                 />
               </ListItemAvatar>
               <ListItemText
+                onClick={() => openViewModal(grocery)}
+                sx={{ cursor: 'pointer' }}
                 primary={`${grocery.name} ${grocery.size ? `(${grocery.size})` : ''}`}
                 secondary={
                   <>
@@ -195,130 +185,16 @@ const BrowseGroceries: React.FC = () => {
         </List>
       )}
 
-      {/* Updated View Grocery Modal */}
-      <Modal open={viewModalOpen} onClose={closeViewModal}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 500,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            maxHeight: '80vh',
-            overflowY: 'auto',
-          }}
-        >
-          {selectedGrocery && (
-            <>
-              <Box
-                component="img"
-                src={selectedGrocery.image_url || '/images/default-grocery.png'}
-                alt={selectedGrocery.name}
-                sx={{ width: '100%', height: 'auto', mb: 2, borderRadius: 1 }}
-              />
-              <Typography variant="h5" gutterBottom>
-                {selectedGrocery.name}
-              </Typography>
-              {selectedGrocery.barcode_number && (
-                <Typography><strong>Barcode:</strong> {selectedGrocery.barcode_number}</Typography>
-              )}
-              {selectedGrocery.brand && (
-                <Typography><strong>Brand:</strong> {selectedGrocery.brand}</Typography>
-              )}
-              {selectedGrocery.category && (
-                <Typography sx={{ mt: 1 }}><strong>Category:</strong> {selectedGrocery.category}</Typography>
-              )}
-              {selectedGrocery.size && (
-                <Typography sx={{ mt: 1 }}><strong>Size:</strong> {selectedGrocery.size}</Typography>
-              )}
-              {selectedGrocery.description && (
-                <Typography sx={{ mt: 1 }}><strong>Description:</strong> {selectedGrocery.description}</Typography>
-              )}
-              {selectedGrocery.store_name && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Store:</strong> {selectedGrocery.store_name}
-                  {selectedGrocery.store_price && ` ($${selectedGrocery.store_price})`}
-                </Typography>
-              )}
-              <Typography sx={{ mt: 1 }}>
-                <strong>Entry Type:</strong> {selectedGrocery.manually_entered ? 'Manually Entered' : 'Automatically Retrieved'}
-              </Typography>
-              <Typography sx={{ mt: 1 }}>
-                <strong>Barcode Lookup Status:</strong> {selectedGrocery.barcode_lookup_failed ? 'Failed' : 'Successful'}
-              </Typography>
-              <Typography sx={{ mt: 1 }}>
-                <strong>Created At:</strong> {new Date(selectedGrocery.created_at).toLocaleString()}
-              </Typography>
-              <Button variant="contained" sx={{ mt: 3 }} onClick={closeViewModal}>
-                Close
-              </Button>
-            </>
-          )}
-        </Box>
-      </Modal>
-
-      {/* Add Grocery Modal */}
-      <Modal open={addModalOpen} onClose={closeAddModal}>
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: 400,
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 2,
-            maxHeight: '90vh',
-            overflowY: 'auto',
-          }}
-        >
-          <Typography variant="h5" gutterBottom>
-            Add Grocery
-          </Typography>
-          {['name', 'description', 'category', 'brand', 'size', 'image_url', 'store_name', 'store_price'].map((field) => (
-            <TextField
-              key={field}
-              label={field.replace('_', ' ').toUpperCase()}
-              name={field}
-              value={(newGrocery as any)[field]}
-              onChange={handleInputChange}
-              fullWidth
-              margin="normal"
-            />
-          ))}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-            <Button variant="contained" color="primary" onClick={handleAddGrocery}>
-              Submit
-            </Button>
-            <Button variant="outlined" color="secondary" onClick={clearFormFields}>
-              Clear Fields
-            </Button>
-            <Button variant="text" onClick={closeAddModal}>
-              Cancel
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
-
-      {/* Delete Confirmation Modal */}
-      <Modal open={deleteModalOpen} onClose={closeDeleteModal}>
-        <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 350, bgcolor: 'background.paper', boxShadow: 24, p: 3, borderRadius: 2 }}>
-          <Typography variant="h6" gutterBottom>Confirm Delete</Typography>
-          <Typography>Are you sure you want to delete this grocery?</Typography>
-          <Button variant="contained" color="error" onClick={confirmDeleteGrocery} sx={{ mt: 2, mr: 1 }}>
-            Delete
-          </Button>
-          <Button variant="outlined" onClick={closeDeleteModal} sx={{ mt: 2 }}>
-            Cancel
-          </Button>
-        </Box>
-      </Modal>
+      <ViewGroceryModal open={viewModalOpen} onClose={closeViewModal} grocery={selectedGrocery} />
+      <AddGroceryModal
+        open={addModalOpen}
+        onClose={closeAddModal}
+        newGrocery={newGrocery}
+        handleInputChange={handleInputChange}
+        handleAddGrocery={handleAddGrocery}
+        clearFormFields={clearFormFields}
+      />
+      <DeleteConfirmationModal open={deleteModalOpen} onClose={closeDeleteModal} onConfirm={confirmDeleteGrocery} />
     </Container>
   );
 };

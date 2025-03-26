@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Container, Typography, Button, Box, Modal } from '@mui/material';
-import Quagga from 'quagga';
+import { Container, Typography, Button, Box } from '@mui/material';
+import Quagga from '@ericblade/quagga2';
 import './CheckGrocery.css';
+import ScanModal from '../modals/ScanModal'; // Adjust the path as needed
 
 const CheckGrocery: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -13,10 +14,10 @@ const CheckGrocery: React.FC = () => {
   const quaggaStarted = useRef(false);
   const hasDetected = useRef(false);
 
-  // Initialize Quagga and attach to the video container
+  // Initialize Quagga2 and attach to the video container
   const initQuagga = useCallback(() => {
     if (videoRef.current) {
-      console.log('Initializing Quagga...');
+      console.log('Initializing Quagga2...');
       Quagga.init(
         {
           inputStream: {
@@ -34,12 +35,12 @@ const CheckGrocery: React.FC = () => {
         },
         (err) => {
           if (err) {
-            console.error('Quagga init error:', err);
+            console.error('Quagga2 init error:', err);
             return;
           }
           quaggaStarted.current = true;
           Quagga.start();
-          console.log('Quagga started, scanning...');
+          console.log('Quagga2 started, scanning...');
           setTimeout(() => {
             const videoElem = videoRef.current?.querySelector('video');
             if (videoElem) {
@@ -72,11 +73,10 @@ const CheckGrocery: React.FC = () => {
     } else {
       console.error('Video ref is not defined');
     }
-  }, []);  // Empty array since the function uses refs only (no changing state or props)
+  }, []);
 
   // Start scanning by opening the modal
   const startScanning = () => {
-    // Reset state for a new scan
     setBarcode('');
     setReaderType('');
     setProductData(null);
@@ -85,14 +85,14 @@ const CheckGrocery: React.FC = () => {
     setScanning(true);
   };
 
-  // Cancel scanning: stop Quagga and close modal
+  // Cancel scanning: stop Quagga2 and close modal
   const cancelScanning = () => {
     if (quaggaStarted.current) {
       try {
         Quagga.stop();
-        console.log('Quagga stopped due to cancellation');
+        console.log('Quagga2 stopped due to cancellation');
       } catch (err) {
-        console.warn('Error stopping Quagga:', err);
+        console.warn('Error stopping Quagga2:', err);
       }
     }
     setScanning(false);
@@ -125,7 +125,6 @@ const CheckGrocery: React.FC = () => {
       });
   };
 
-  // When scanning becomes true, initialize Quagga
   useEffect(() => {
     if (scanning) {
       initQuagga();
@@ -135,7 +134,7 @@ const CheckGrocery: React.FC = () => {
         try {
           Quagga.stop();
         } catch (err) {
-          console.warn('Error stopping Quagga during cleanup:', err);
+          console.warn('Error stopping Quagga2 during cleanup:', err);
         }
       }
       Quagga.offDetected();
@@ -164,9 +163,8 @@ const CheckGrocery: React.FC = () => {
         <Box sx={{ mb: 2 }}>
           <Typography variant="h6">Product Details:</Typography>
           {(() => {
-            const product = productData.products[0]; // using the first product
+            const product = productData.products[0];
 
-            // Helper function to get ordinal suffix for a day
             const getOrdinal = (n: number) => {
               if (n > 3 && n < 21) return "th";
               switch (n % 10) {
@@ -181,7 +179,6 @@ const CheckGrocery: React.FC = () => {
               }
             };
 
-            // Format a date string (e.g., "2023-10-24 03:01:46") to a format like "24th Oct 2023"
             const formatDate = (dateStr: string) => {
               const d = new Date(dateStr);
               if (isNaN(d.getTime())) return dateStr;
@@ -191,7 +188,6 @@ const CheckGrocery: React.FC = () => {
               return `${day}${getOrdinal(day)} ${month} ${year}`;
             };
 
-            // Find the store named "Walmart Canada"
             const walmartStore =
               product.stores &&
               product.stores.find((store: any) => store.name === "Walmart Canada");
@@ -226,45 +222,9 @@ const CheckGrocery: React.FC = () => {
         </Box>
       )}
 
-      {/* Modal for scanning with modified focus attributes */}
-      <Modal
-        open={scanning}
-        onClose={cancelScanning}
-        keepMounted
-        disableEnforceFocus
-        disableAutoFocus
-        disableRestoreFocus
-      >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '95%',
-            maxWidth: '640px',
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 2,
-          }}
-        >
-          <Box
-            ref={videoRef}
-            className="videoContainer"
-            sx={{
-              width: '95%',
-              height: '45vh',
-              margin: 'auto',
-              overflow: 'hidden',
-            }}
-          />
-          <Button variant="contained" color="secondary" onClick={cancelScanning} sx={{ mt: 2 }}>
-            Cancel Scanning
-          </Button>
-        </Box>
-      </Modal>
+      {/* Use the ScanModal component */}
+      <ScanModal open={scanning} onClose={cancelScanning} videoRef={videoRef} />
 
-      {/* When not scanning, show the Start/Scan Again button */}
       {!scanning && (
         <Button variant="contained" color="primary" onClick={startScanning} sx={{ mt: 2 }}>
           {barcode ? 'Scan Again' : 'Start Scanning'}
