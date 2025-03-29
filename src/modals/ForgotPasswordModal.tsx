@@ -98,6 +98,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
               required
             />
             <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>

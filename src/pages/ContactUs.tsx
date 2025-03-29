@@ -11,6 +11,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha';
 // Import the named export and cast it to a callable function.
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom'; // <-- For navigation
 
 interface DecodedToken {
   first_name: string;
@@ -29,6 +30,8 @@ const ContactUs: React.FC = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const siteKey = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
+
+  const navigate = useNavigate(); // <-- Initialize navigate for cancel button
 
   // Prefill fields if the user is logged in
   useEffect(() => {
@@ -93,6 +96,20 @@ const ContactUs: React.FC = () => {
       setFeedback({ type: 'error', text: error.message || 'Submission failed due to network error.' });
       window.scrollTo(0, 0);
     }
+  };
+
+  // Handler to clear all form fields
+  const handleClear = () => {
+    setName('');
+    setEmail('');
+    setSubject('');
+    setMessage('');
+    setRecaptchaToken(null);
+  };
+
+  // Handler to cancel and navigate back to the home page
+  const handleCancel = () => {
+    navigate('/');
   };
 
   return (
@@ -160,6 +177,14 @@ const ContactUs: React.FC = () => {
           <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
             Send Message
           </Button>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, gap: 1 }}>
+            <Button variant="outlined" onClick={handleClear} color="warning" sx={{ flex: 1 }}>
+              Clear Form
+            </Button>
+            <Button variant="outlined" onClick={handleCancel} sx={{ flex: 1 }}>
+              Cancel
+            </Button>
+          </Box>
         </Box>
       </Paper>
     </Container>
