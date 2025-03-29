@@ -18,6 +18,7 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, onClose, videoRef }) => {
       disableRestoreFocus
     >
       <div
+        className="thin-scrollbar no-focus-outline"
         style={{
           position: 'absolute',
           top: '50%',

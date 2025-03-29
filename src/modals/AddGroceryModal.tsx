@@ -21,6 +21,7 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div
+        className="thin-scrollbar no-focus-outline"
         style={{
           position: 'absolute',
           top: '50%',
