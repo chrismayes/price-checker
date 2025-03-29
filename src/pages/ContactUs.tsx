@@ -1,5 +1,4 @@
-// src/pages/ContactUs.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Typography,
@@ -10,6 +9,15 @@ import {
   Alert,
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
+// Import the named export and cast it to a callable function.
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+  first_name: string;
+  last_name: string;
+  email: string;
+  // add other fields if needed
+}
 
 const ContactUs: React.FC = () => {
   const [name, setName] = useState<string>('');
@@ -21,6 +29,25 @@ const ContactUs: React.FC = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const siteKey = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
+
+  // Prefill fields if the user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    console.log('Token from localStorage:', token);
+    if (token) {
+      try {
+        // Cast jwtDecode to a callable function.
+        const decodeFn = jwtDecode as unknown as (token: string) => DecodedToken;
+        const decoded: DecodedToken = decodeFn(token);
+        console.log('Decoded token:', decoded);
+        // Adjust keys if your token payload uses different naming conventions.
+        setName(`${decoded.first_name} ${decoded.last_name}`);
+        setEmail(decoded.email);
+      } catch (error) {
+        console.error('Failed to decode token:', error);
+      }
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,8 +82,6 @@ const ContactUs: React.FC = () => {
         setFeedback({ type: 'error', text: errorMessage });
       } else {
         setFeedback({ type: 'success', text: data.message || 'Message sent successfully!' });
-        setName('');
-        setEmail('');
         setSubject('');
         setMessage('');
         setRecaptchaToken(null);

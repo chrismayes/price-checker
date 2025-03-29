@@ -1,4 +1,3 @@
-// src/pages/BrowseGroceries.tsx
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Container, Typography, List, ListItem, ListItemText, CircularProgress,

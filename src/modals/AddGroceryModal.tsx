@@ -1,4 +1,3 @@
-// src/modals/AddGroceryModal.tsx
 import React from 'react';
 import { Modal, Box, Typography, Button, TextField } from '@mui/material';
 
@@ -21,48 +20,52 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
+      <div
+        style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: 'calc(100% - 20px)',
-          maxWidth: 400,
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
+          maxWidth: 600,
           maxHeight: '90vh',
           overflowY: 'auto',
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Add Grocery
-        </Typography>
-        {['name', 'description', 'category', 'brand', 'size', 'image_url', 'store_name', 'store_price'].map((field) => (
-          <TextField
-            key={field}
-            label={field.replace('_', ' ').toUpperCase()}
-            name={field}
-            value={newGrocery[field]}
-            onChange={handleInputChange}
-            fullWidth
-            margin="normal"
-          />
-        ))}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-          <Button variant="contained" color="primary" onClick={handleAddGrocery}>
+        <Box
+          sx={{
+            m: 4,
+            p: 3,
+            boxShadow: 24,
+            borderRadius: 2,
+            bgcolor: 'background.paper',
+          }}
+        >
+          <Typography variant="h5" gutterBottom>
+            Add Grocery
+          </Typography>
+          {['name', 'description', 'category', 'brand', 'size', 'image_url', 'store_name', 'store_price'].map((field) => (
+            <TextField
+              key={field}
+              label={field.replace('_', ' ').toUpperCase()}
+              name={field}
+              value={newGrocery[field]}
+              onChange={handleInputChange}
+              fullWidth
+              margin="normal"
+            />
+          ))}
+          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleAddGrocery}>
             Submit
           </Button>
-          <Button variant="outlined" color="secondary" onClick={clearFormFields}>
+          <Button variant="outlined" color="warning" fullWidth sx={{ mt: 2 }} onClick={clearFormFields}>
             Clear Fields
           </Button>
-          <Button variant="text" onClick={onClose}>
+          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={onClose}>
             Cancel
           </Button>
         </Box>
-      </Box>
+      </div>
     </Modal>
   );
 };

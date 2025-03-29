@@ -1,4 +1,3 @@
-// src/AppRoutes.tsx
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
@@ -10,11 +9,12 @@ import ContactUs from './pages/ContactUs';
 import Header from './components/Header';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 const AppRoutes: React.FC = () => {
   return (
     <>
-      {/* Breadcrumbs will update automatically based on the current URL */}
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -22,9 +22,9 @@ const AppRoutes: React.FC = () => {
         <Route path="/browse" element={<PrivateRoute><BrowseGroceries /></PrivateRoute>} />
         <Route path="/check" element={<PrivateRoute><CheckGrocery /></PrivateRoute>} />
         <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
-        {/* Redirect any unknown routes to home */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<ContactUs />} />
+        {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

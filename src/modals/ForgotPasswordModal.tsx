@@ -57,49 +57,58 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box
-        sx={{
+      <div
+        style={{
           position: 'absolute',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: 'calc(100% - 20px)',
-          maxWidth: 400,
-          bgcolor: 'background.paper',
-          boxShadow: 24,
-          p: 4,
-          borderRadius: 2,
+          maxWidth: 600,
           maxHeight: '90vh',
           overflowY: 'auto',
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Forgot Password
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          Enter your email address below and we'll send you instructions to reset your password.
-        </Typography>
-        {feedback && (
-          <Alert severity={feedback.type} sx={{ mb: 2 }}>
-            {feedback.text}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit}>
-          <TextField
-            label="Email"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
-            Send Reset Instructions
-          </Button>
+        <Box
+          sx={{
+            m: 4,
+            p: 3,
+            boxShadow: 24,
+            borderRadius: 2,
+            bgcolor: 'background.paper',
+          }}
+        >
+          <Typography variant="h5" gutterBottom>
+            Forgot Password
+          </Typography>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Enter your email address below and we'll send you instructions to reset your password.
+          </Typography>
+          {feedback && (
+            <Alert severity={feedback.type} sx={{ mb: 2 }}>
+              {feedback.text}
+            </Alert>
+          )}
+          <Box component="form" onSubmit={handleSubmit}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
+              Send Reset Instructions
+            </Button>
+            <Button variant="outlined" color="primary"  fullWidth sx={{ mt: 2 }} onClick={onClose}>
+              Cancel
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      </div>
     </Modal>
   );
 };

@@ -1,4 +1,3 @@
-// src/components/Header.tsx
 import React from 'react';
 import {
   AppBar,
@@ -43,13 +42,14 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    window.dispatchEvent(new Event('authChange'));
     navigate('/login');
   };
 
   return (
     <AppBar position="static" color="primary">
       {/* Top Toolbar: Logo and Header Text */}
-      <Toolbar sx={{ justifyContent: 'flex-start' }}>
+      <Toolbar sx={{ justifyContent: 'flex-start', backgroundColor: "white" }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
           <img
             src="/images/logo-image.png"
@@ -60,8 +60,9 @@ const Header: React.FC = () => {
         </Box>
         <Typography
           variant={isMobile ? "h4" : "h3"}
+          color="primary"
           component="div"
-          sx={{ fontFamily: '"Lobster Two", cursive' }}
+          sx={{ fontFamily: '"Lobster Two", cursive', textShadow: "#eee 4px 4px" }}
         >
           Grocery Price Checker
         </Typography>

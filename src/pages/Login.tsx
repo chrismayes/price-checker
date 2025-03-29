@@ -1,4 +1,3 @@
-// src/pages/Login.tsx
 import React, { useState } from 'react';
 import {
   Container,
@@ -8,9 +7,13 @@ import {
   Link,
   Box,
   Alert,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import SignupModal from '../modals/SignupModal';
 import ForgotPasswordModal from '../modals/ForgotPasswordModal';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -18,6 +21,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState<string>('');
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,11 +66,23 @@ const Login: React.FC = () => {
         <TextField
           label="Password"
           variant="outlined"
-          type="password"
           fullWidth
           margin="normal"
+          type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <Button
           variant="contained"

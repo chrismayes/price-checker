@@ -1,9 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, Link } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Footer: React.FC = () => {
-  const isAuthenticated = Boolean(localStorage.getItem('access_token'));
+  // Initialize isAuthenticated state based on localStorage
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    Boolean(localStorage.getItem('access_token'))
+  );
+
+  useEffect(() => {
+    // Define a handler that updates the state when the custom event is fired
+    const handleAuthChange = () => {
+      setIsAuthenticated(Boolean(localStorage.getItem('access_token')));
+    };
+
+    // Listen for the custom "authChange" event
+    window.addEventListener('authChange', handleAuthChange);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+  }, []);
 
   return (
     <Box
