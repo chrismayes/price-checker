@@ -62,6 +62,7 @@ const Login: React.FC = () => {
           margin="normal"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
         />
         <TextField
           label="Password"
@@ -72,6 +73,8 @@ const Login: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           InputProps={{
+            autoCapitalize: 'none',
+            autoCorrect: 'off',
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton

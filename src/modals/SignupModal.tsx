@@ -141,6 +141,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
                 margin="normal"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
                 required
               />
               <TextField
@@ -151,6 +152,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
                 margin="normal"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
                 required
               />
               <TextField
@@ -181,6 +183,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 InputProps={{
+                  autoCapitalize: 'none',
+                  autoCorrect: 'off',
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
@@ -203,6 +207,8 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 InputProps={{
+                  autoCapitalize: 'none',
+                  autoCorrect: 'off',
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton

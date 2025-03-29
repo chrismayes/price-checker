@@ -14,6 +14,14 @@ const theme = createTheme({
     secondary: {
       main: '#dc004e',
     },
+    text: {
+      primary: '#999',
+    },
+  },
+  typography: {
+    allVariants: {
+      color: '#707070',
+    },
   },
 });
 

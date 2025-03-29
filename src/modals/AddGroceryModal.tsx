@@ -53,6 +53,10 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({
               onChange={handleInputChange}
               fullWidth
               margin="normal"
+              // Conditionally add InputProps only if field is "image_url"
+              {...(field === 'image_url'
+                ? { InputProps: { inputProps: { autoCapitalize: 'none', autoCorrect: 'off' } } }
+                : {})}
             />
           ))}
           <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleAddGrocery}>

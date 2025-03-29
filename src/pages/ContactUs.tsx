@@ -55,6 +55,7 @@ const ContactUs: React.FC = () => {
 
     if (!recaptchaToken) {
       setFeedback({ type: 'error', text: 'Please verify that you are not a robot.' });
+      window.scrollTo(0, 0);
       return;
     }
 
@@ -80,14 +81,17 @@ const ContactUs: React.FC = () => {
             .join(' | ');
         }
         setFeedback({ type: 'error', text: errorMessage });
+        window.scrollTo(0, 0);
       } else {
         setFeedback({ type: 'success', text: data.message || 'Message sent successfully!' });
+        window.scrollTo(0, 0);
         setSubject('');
         setMessage('');
         setRecaptchaToken(null);
       }
     } catch (error: any) {
       setFeedback({ type: 'error', text: error.message || 'Submission failed due to network error.' });
+      window.scrollTo(0, 0);
     }
   };
 
@@ -123,6 +127,7 @@ const ContactUs: React.FC = () => {
             margin="normal"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
             required
           />
           <TextField
