@@ -10,6 +10,8 @@ import Header from './components/Header';
 import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
 import ScrollToTop from './components/ScrollToTop';
+import ResetPasswordForm from './pages/ResetPasswordForm';
+
 
 const AppRoutes: React.FC = () => {
   return (
@@ -24,6 +26,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/account" element={<PrivateRoute><Account /></PrivateRoute>} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/reset-password" element={<ResetPasswordForm />} />
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
