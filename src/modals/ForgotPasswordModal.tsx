@@ -25,6 +25,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
     setFeedback(null);
 
     try {
+      // POST the user's email to the /api/forgot-password/ endpoint
       const response = await fetch(`${apiUrl}/api/forgot-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -105,7 +106,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
             <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
               Send Reset Instructions
             </Button>
-            <Button variant="outlined" color="primary"  fullWidth sx={{ mt: 2 }} onClick={onClose}>
+            <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={onClose}>
               Cancel
             </Button>
           </Box>
