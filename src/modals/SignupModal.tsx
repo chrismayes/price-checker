@@ -54,6 +54,12 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
       return;
     }
 
+    // Check that the username is only alphanumeric.
+    if (!/^[a-zA-Z0-9]+$/.test(username)) {
+      setError('Username can only contain alphanumeric characters.');
+      return;
+    }
+
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(`${apiUrl}/api/signup/`, {
@@ -85,7 +91,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
         return;
       }
 
-      setSuccess('Signup successful! You can now log in.');
+      setSuccess('Signup successful! A confirmation email has been sent. Please verify your email before logging in.');
     } catch (err: any) {
       setError(err.message || 'Signup failed due to network error.');
     }
@@ -129,7 +135,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
             </Alert>
           )}
           {success ? (
-            // If signup is successful, show a close button
+            // If signup is successful, show a close button.
             <Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>
               Close
             </Button>
@@ -225,7 +231,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
               <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
                 Sign Up
               </Button>
-              <Button variant="outlined" color="primary"  fullWidth sx={{ mt: 2 }} onClick={onClose}>
+              <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={onClose}>
                 Cancel
               </Button>
             </form>
