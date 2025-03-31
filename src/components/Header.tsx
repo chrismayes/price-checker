@@ -51,12 +51,14 @@ const Header: React.FC = () => {
       {/* Top Toolbar: Logo and Header Text */}
       <Toolbar sx={{ justifyContent: 'flex-start', backgroundColor: "white" }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-          <img
-            src="/images/logo-image.png"
-            alt="Logo"
-            style={isMobile ? { height: '100%', maxHeight: '70px', objectFit: 'contain' } :
-                              { height: '100%', maxHeight: '100px', objectFit: 'contain' }}
-          />
+          <RouterLink to="/">
+            <img
+              src="/images/logo-image.png"
+              alt="Logo"
+              style={isMobile ? { height: '100%', maxHeight: '70px', objectFit: 'contain' } :
+                                { height: '100%', maxHeight: '100px', objectFit: 'contain' }}
+            />
+          </RouterLink>
         </Box>
         <Typography
           variant={isMobile ? "h4" : "h3"}
