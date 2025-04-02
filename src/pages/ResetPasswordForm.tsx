@@ -26,7 +26,6 @@ const ResetPasswordForm: React.FC = () => {
   const [feedback, setFeedback] = useState<{ message: string; severity: 'error' | 'success' } | null>(null);
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-  // State to track if reset was successful
   const [resetSuccessful, setResetSuccessful] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -72,6 +71,7 @@ const ResetPasswordForm: React.FC = () => {
         // Clear the form fields and disable the reset button
         setNewPassword('');
         setConfirmPassword('');
+        (document.activeElement as HTMLElement)?.blur();
         setResetSuccessful(true);
       } else {
         setFeedback({ message: data.error || 'Password reset failed.', severity: 'error' });
