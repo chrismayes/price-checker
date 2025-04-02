@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
-import ResetPasswordForm from './ResetPasswordForm';
+import ResetPasswordForm from '../pages/ResetPasswordForm';
 import { renderWithProviders } from '../test-utils';
 
 describe('Reset Password Form', () => {

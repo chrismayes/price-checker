@@ -10,6 +10,7 @@
     "@mui/material": "^6.4.8",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.8.4",
     "jwt-decode": "^4.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -21,30 +22,12 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
+    "test": "react-app-rewired test --verbose",
     "eject": "react-scripts eject",
     "test:watch": "jest --watch"
   },
   "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ],
-    "transform": {
-      "^.+\\.(ts|tsx)$": "babel-jest"
-    },
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "testEnvironment": "jsdom",
-    "moduleNameMapper": {
-      "^rrd$": "<rootDir>/node_modules/react-router-dom/dist/main.js",
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-    }
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"]
   },
   "eslintConfig": {
     "extends": [

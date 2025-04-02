@@ -98,7 +98,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} role="dialog">
       <div
         className="thin-scrollbar no-focus-outline"
         style={{
