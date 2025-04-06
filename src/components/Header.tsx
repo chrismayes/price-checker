@@ -48,12 +48,11 @@ const Header: React.FC = () => {
 
   return (
     <AppBar position="static" color="primary">
-      {/* Top Toolbar: Logo and Header Text */}
-      <Toolbar sx={{ justifyContent: 'flex-start', backgroundColor: "white" }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
+      <Toolbar sx={{ justifyContent: 'flex-start', backgroundColor: "white", paddingLeft: "0px !important" }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mr: isMobile ? 0 : 1 }}>
           <RouterLink to="/">
             <img
-              src="/images/logo-image.png"
+              src="/images/logo.png"
               alt="Logo"
               style={isMobile ? { height: '100%', maxHeight: '70px', objectFit: 'contain' } :
                                 { height: '100%', maxHeight: '100px', objectFit: 'contain' }}
@@ -61,7 +60,7 @@ const Header: React.FC = () => {
           </RouterLink>
         </Box>
         <Typography
-          variant={isMobile ? "h4" : "h3"}
+          variant={isMobile ? "h4" : "h2"}
           color="primary"
           component="div"
           sx={{ fontFamily: '"Lobster Two", cursive', textShadow: "#eee 4px 4px" }}
@@ -69,7 +68,6 @@ const Header: React.FC = () => {
           Grocery Price Checker
         </Typography>
       </Toolbar>
-      {/* Dense Toolbar: Breadcrumbs left; Account link & Logout right */}
       <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
         <BreadcrumbsNav />
         {token && firstName && (
