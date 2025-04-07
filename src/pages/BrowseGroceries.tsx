@@ -48,7 +48,6 @@ const BrowseGroceries: React.FC = () => {
     fetchGroceries();
   }, [fetchGroceries]);
 
-  // View Modal handlers
   const openViewModal = (grocery: Grocery) => {
     setSelectedGrocery(grocery);
     setViewModalOpen(true);
@@ -77,7 +76,6 @@ const BrowseGroceries: React.FC = () => {
     }
   };
 
-  // Delete Modal handlers
   const openDeleteModal = (id: number) => {
     setGroceryToDelete(id);
     setDeleteModalOpen(true);
@@ -114,12 +112,10 @@ const BrowseGroceries: React.FC = () => {
     store_price: '',
   };
 
-  // Clear form fields
   const clearFormFields = () => {
     setNewGrocery(initialGroceryState);
   };
 
-  // Enhanced Add Modal handlers
   const openAddModal = () => {
     clearFormFields();
     setAddModalOpen(true);

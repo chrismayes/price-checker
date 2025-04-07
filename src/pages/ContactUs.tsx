@@ -7,17 +7,16 @@ import {
   TextField,
   Button,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
-// Import the named export and cast it to a callable function.
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom'; // <-- For navigation
+import { useNavigate } from 'react-router-dom';
 
 interface DecodedToken {
   first_name: string;
   last_name: string;
   email: string;
-  // add other fields if needed
 }
 
 const ContactUs: React.FC = () => {
@@ -27,11 +26,12 @@ const ContactUs: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const apiUrl = process.env.REACT_APP_API_URL;
   const siteKey = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
 
-  const navigate = useNavigate(); // <-- Initialize navigate for cancel button
+  const navigate = useNavigate();
 
   // Prefill fields if the user is logged in
   useEffect(() => {
@@ -43,7 +43,6 @@ const ContactUs: React.FC = () => {
         const decodeFn = jwtDecode as unknown as (token: string) => DecodedToken;
         const decoded: DecodedToken = decodeFn(token);
         console.log('Decoded token:', decoded);
-        // Adjust keys if your token payload uses different naming conventions.
         setName(`${decoded.first_name} ${decoded.last_name}`);
         setEmail(decoded.email);
       } catch (error) {
@@ -55,10 +54,12 @@ const ContactUs: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFeedback(null);
+    setIsSubmitting(true);
 
     if (!recaptchaToken) {
       setFeedback({ type: 'error', text: 'Please verify that you are not a robot.' });
       window.scrollTo(0, 0);
+      setIsSubmitting(false);
       return;
     }
 
@@ -95,10 +96,11 @@ const ContactUs: React.FC = () => {
     } catch (error: any) {
       setFeedback({ type: 'error', text: error.message || 'Submission failed due to network error.' });
       window.scrollTo(0, 0);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  // Handler to clear all form fields
   const handleClear = () => {
     setName('');
     setEmail('');
@@ -107,7 +109,6 @@ const ContactUs: React.FC = () => {
     setRecaptchaToken(null);
   };
 
-  // Handler to cancel and navigate back to the home page
   const handleCancel = () => {
     navigate('/');
   };
@@ -174,8 +175,16 @@ const ContactUs: React.FC = () => {
               onExpired={() => setRecaptchaToken(null)}
             />
           </Box>
-          <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
-            Send Message
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={isSubmitting}
+            startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
+          >
+            {isSubmitting ? 'Submitting...' : 'Send Message'}
           </Button>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, gap: 1 }}>
             <Button variant="outlined" onClick={handleClear} color="warning" sx={{ flex: 1 }}>

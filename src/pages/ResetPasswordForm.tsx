@@ -47,7 +47,6 @@ const ResetPasswordForm: React.FC = () => {
     e.preventDefault();
     setFeedback(null);
 
-    // Validate new password restrictions.
     const pwdError = validatePassword(newPassword);
     if (pwdError) {
       setFeedback({ message: pwdError, severity: 'error' });
@@ -68,7 +67,6 @@ const ResetPasswordForm: React.FC = () => {
       const data = await response.json();
       if (response.ok) {
         setFeedback({ message: data.message || 'Password reset successfully.', severity: 'success' });
-        // Clear the form fields and disable the reset button
         setNewPassword('');
         setConfirmPassword('');
         (document.activeElement as HTMLElement)?.blur();
@@ -135,7 +133,7 @@ const ResetPasswordForm: React.FC = () => {
           type="submit"
           fullWidth
           sx={{ mt: 2 }}
-          disabled={resetSuccessful} // Disable after success
+          disabled={resetSuccessful}
         >
           Reset Password
         </Button>

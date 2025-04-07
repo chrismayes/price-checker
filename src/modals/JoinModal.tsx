@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, Box, Typography, TextField, Button, Alert } from '@mui/material';
+import { Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
+import ModalWrapper from '../components/ModalWrapper';
 
 interface JoinModalProps {
   open: boolean;
@@ -11,12 +12,14 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClose = () => {
     setFirstName('');
     setEmail('');
     setSuccess(false);
     setError(null);
+    setIsSubmitting(false);
     onClose();
   };
 
@@ -24,7 +27,7 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    setSuccess(null);
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${apiUrl}/api/email-list/`, {
         method: 'POST',
@@ -48,92 +51,78 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
       }
     } catch (error) {
       setError('Signup failed due to a network error.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <Modal open={open} onClose={handleClose} role="dialog">
-      <div
-        className="thin-scrollbar no-focus-outline"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'calc(100% - 20px)',
-          maxWidth: 600,
-          maxHeight: '90vh',
-          overflowY: 'auto',
-        }}
-      >
-        <Box
-          sx={{
-            m: 4,
-            p: 3,
-            boxShadow: 24,
-            borderRadius: 2,
-            bgcolor: 'background.paper',
-          }}
-        >
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
-            </Alert>
-          )}
-          {success ? (
-            <>
-              <Typography variant="h6" component="h2" gutterBottom>
-                Thank you!
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                You will be notified when the app goes live.
-              </Typography>
-              <Button variant="contained" color="primary" onClick={handleClose} fullWidth sx={{ mt: 2 }}>
-                Close
-              </Button>
-            </>
-          ) : (
-            <form onSubmit={handleSubmit}>
-              <Typography variant="h6" component="h2" gutterBottom>
-                Be the First to Know!
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                The site is still under development. If you'd like to be the first to be notified when the app goes live, please leave your name and email address.
-              </Typography>
-              <TextField
-                label="First Name"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                inputProps={{ autoCorrect: 'off' }}
-                autoComplete="first-name"
-                required
-              />
-              <TextField
-                label="Email"
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
-                autoComplete="email"
-                required
-              />
-              <Button variant="contained" color="primary" type="submit" fullWidth sx={{ mt: 2 }}>
-                Submit
-              </Button>
-              <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleClose}>
-                Cancel
-              </Button>
-            </form>
-          )}
-        </Box>
-      </div>
-    </Modal>
+    <ModalWrapper open={open} onClose={handleClose}>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
+      {success ? (
+        <>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Thank you!
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            You will be notified when the app goes live.
+          </Typography>
+          <Button variant="contained" color="primary" onClick={handleClose} fullWidth sx={{ mt: 2 }}>
+            Close
+          </Button>
+        </>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <Typography variant="h6" component="h2" gutterBottom>
+            Be the First to Know!
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            The site is still under development. If you'd like to be the first to be notified when the app goes live, please leave your name and email address.
+          </Typography>
+          <TextField
+            label="First Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            inputProps={{ autoCorrect: 'off' }}
+            autoComplete="first-name"
+            required
+          />
+          <TextField
+            label="Email"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
+            autoComplete="email"
+            required
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            fullWidth
+            sx={{ mt: 2 }}
+            disabled={isSubmitting}
+            startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit'}
+          </Button>
+          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleClose}>
+            Cancel
+          </Button>
+        </form>
+      )}
+    </ModalWrapper>
   );
 };
 

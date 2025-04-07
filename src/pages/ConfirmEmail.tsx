@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, CircularProgress, Button } from '@mui/material';
+import { Container, Typography, CircularProgress, Button, Alert } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const ConfirmEmail: React.FC = () => {
@@ -8,8 +8,8 @@ const ConfirmEmail: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [feedback, setFeedback] = useState<string>('');
   const [error, setError] = useState<string>('');
-
-  // Extract uid and token from query parameters.
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
   const query = new URLSearchParams(location.search);
   const uid = query.get('uid');
   const token = query.get('token');
@@ -37,11 +37,13 @@ const ConfirmEmail: React.FC = () => {
           setError(data.error || 'Email confirmation failed.');
         } else {
           setFeedback(data.message || 'Email confirmed. You can now log in.');
+          setSuccess(true);
         }
       } catch (err: any) {
         setError(err.message || 'An error occurred while confirming your email.');
       }
       setLoading(false);
+      setIsSubmitting(false);
     };
 
     confirmEmail();
@@ -57,20 +59,30 @@ const ConfirmEmail: React.FC = () => {
         <CircularProgress />
       ) : error ? (
         <>
-          <Typography variant="h5" color="error" gutterBottom>
+          <Alert severity="error" sx={{ mb: 2 }}>
             {error}
-          </Typography>
+          </Alert>
           <Button variant="contained" onClick={handleGoToLogin} sx={{ mt: 2 }}>
             Go to Login
           </Button>
         </>
+      ) : success ? (
+        <Typography variant="h5" gutterBottom>
+          {feedback}
+        </Typography>
       ) : (
         <>
           <Typography variant="h5" gutterBottom>
             {feedback}
           </Typography>
-          <Button variant="contained" onClick={handleGoToLogin} sx={{ mt: 2, }}>
-            Go to Login
+          <Button
+            variant="contained"
+            onClick={handleGoToLogin}
+            sx={{ mt: 2 }}
+            disabled={isSubmitting}
+            startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
+          >
+            {isSubmitting ? 'Submitting...' : 'Go to Login'}
           </Button>
         </>
       )}

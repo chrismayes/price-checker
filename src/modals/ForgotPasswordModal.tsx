@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Box, Typography, TextField, Button, Alert } from '@mui/material';
+import { Modal, Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
 
 interface ForgotPasswordModalProps {
   open: boolean;
@@ -11,18 +11,19 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [cooldown, setCooldown] = useState<number>(0);
   const [requestSent, setRequestSent] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const apiUrl = process.env.REACT_APP_API_URL;
 
   // Ref for the timer to clear it when needed
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Clear form fields and feedback when the modal is closed
   useEffect(() => {
     if (!open) {
       setEmail('');
       setFeedback(null);
       setCooldown(0);
       setRequestSent(false);
+      setIsSubmitting(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -49,9 +50,9 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFeedback(null);
+    setIsSubmitting(true);
 
     try {
-      // POST the user's email to the /api/forgot-password/ endpoint
       const response = await fetch(`${apiUrl}/api/forgot-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -80,6 +81,8 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
       }
     } catch (error: any) {
       setFeedback({ type: 'error', text: error.message || 'Network error.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -136,9 +139,10 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
               type="submit"
               fullWidth
               sx={{ mt: 2 }}
-              disabled={cooldown > 0}
+              disabled={isSubmitting || cooldown > 0}
+              startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
             >
-              {cooldown > 0
+              {isSubmitting ? 'Submitting...' : cooldown > 0
                 ? `Send Reset Instructions Again (${cooldown})`
                 : 'Send Reset Instructions'}
             </Button>

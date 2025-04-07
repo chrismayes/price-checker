@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Box, Typography, Button } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+import ModalWrapper from '../components/ModalWrapper';
 
 export interface Grocery {
   id: number;
@@ -24,91 +25,42 @@ interface ViewGroceryModalProps {
 }
 
 const ViewGroceryModal: React.FC<ViewGroceryModalProps> = ({ open, onClose, grocery }) => {
+  if (!grocery) return null;
+
   return (
-    <Modal open={open} onClose={onClose}>
-      <div
-        className="thin-scrollbar no-focus-outline"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'calc(100% - 20px)',
-          maxWidth: 500,
-          maxHeight: '80vh',
-          overflowY: 'auto',
-        }}
-      >
+    <ModalWrapper open={open} onClose={onClose}>
+      <Typography variant="h5" gutterBottom>
+        {grocery.name}
+      </Typography>
+      {grocery.image_url && (
         <Box
-          sx={{
-            m: 4,
-            p: 3,
-            boxShadow: 24,
-            borderRadius: 2,
-            bgcolor: 'background.paper',
-          }}
-        >
-          {grocery && (
-            <>
-              <Box
-                component="img"
-                src={grocery.image_url || '/images/default-grocery.png'}
-                alt={grocery.name}
-                sx={{ width: '100%', height: 'auto', mb: 2, borderRadius: 1 }}
-              />
-              <Typography variant="h5" gutterBottom>
-                {grocery.name}
-              </Typography>
-              {grocery.barcode_number && (
-                <Typography>
-                  <strong>Barcode:</strong> {grocery.barcode_number}
-                </Typography>
-              )}
-              {grocery.brand && (
-                <Typography>
-                  <strong>Brand:</strong> {grocery.brand}
-                </Typography>
-              )}
-              {grocery.category && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Category:</strong> {grocery.category}
-                </Typography>
-              )}
-              {grocery.size && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Size:</strong> {grocery.size}
-                </Typography>
-              )}
-              {grocery.description && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Description:</strong> {grocery.description}
-                </Typography>
-              )}
-              {grocery.store_name && (
-                <Typography sx={{ mt: 1 }}>
-                  <strong>Store:</strong> {grocery.store_name}
-                  {grocery.store_price && ` ($${grocery.store_price})`}
-                </Typography>
-              )}
-              <Typography sx={{ mt: 1 }}>
-                <strong>Entry Type:</strong>{' '}
-                {grocery.manually_entered ? 'Manually Entered' : 'Automatically Retrieved'}
-              </Typography>
-              <Typography sx={{ mt: 1 }}>
-                <strong>Barcode Lookup Status:</strong>{' '}
-                {grocery.barcode_lookup_failed ? 'Failed' : 'Successful'}
-              </Typography>
-              <Typography sx={{ mt: 1 }}>
-                <strong>Created At:</strong> {new Date(grocery.created_at).toLocaleString()}
-              </Typography>
-              <Button variant="contained" sx={{ mt: 3 }} onClick={onClose}>
-                Close
-              </Button>
-            </>
-          )}
-        </Box>
-      </div>
-    </Modal>
+          component="img"
+          src={grocery.image_url}
+          alt={grocery.name}
+          sx={{ width: '100%', maxHeight: 300, objectFit: 'contain', mb: 2 }}
+        />
+      )}
+      {grocery.description && (
+        <Typography variant="body1" gutterBottom>
+          {grocery.description}
+        </Typography>
+      )}
+      {grocery.category && (
+        <Typography variant="body2" gutterBottom>
+          <strong>Category:</strong> {grocery.category}
+        </Typography>
+      )}
+      {grocery.brand && (
+        <Typography variant="body2" gutterBottom>
+          <strong>Brand:</strong> {grocery.brand}
+        </Typography>
+      )}
+      {grocery.size && (
+        <Typography variant="body2" gutterBottom>
+          <strong>Size:</strong> {grocery.size}
+        </Typography>
+      )}
+    </ModalWrapper>
   );
 };
 

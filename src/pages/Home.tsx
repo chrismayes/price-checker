@@ -11,10 +11,10 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import CameraAltIcon from '@mui/icons-material/CameraAlt'; // Icon for scanning barcodes
-import PriceCheckIcon from '@mui/icons-material/PriceCheck'; // Icon for scanning price tags
-import StoreIcon from '@mui/icons-material/Store'; // Icon for supermarket comparison
-import JoinModal from '../modals/JoinModal'; // Import the new modal
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import PriceCheckIcon from '@mui/icons-material/PriceCheck';
+import StoreIcon from '@mui/icons-material/Store';
+import JoinModal from '../modals/JoinModal';
 
 const Home: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -91,7 +91,6 @@ const Home: React.FC = () => {
         </ListItem>
       </List>
 
-      {/* Use the JoinModal */}
       <JoinModal open={open} onClose={handleClose} />
     </Container>
   );

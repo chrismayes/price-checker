@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Container, Typography, Button, Box } from '@mui/material';
 import Quagga from '@ericblade/quagga2';
 import './CheckGrocery.css';
-import ScanModal from '../modals/ScanModal'; // Adjust the path as needed
+import ScanModal from '../modals/ScanModal';
 
 const CheckGrocery: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -102,7 +102,7 @@ const CheckGrocery: React.FC = () => {
 
   // Fetch product data from the Django API using the scanned barcode
   const fetchProductData = (barcodeValue: string) => {
-    const apiUrl = process.env.REACT_APP_API_URL; // e.g. "http://localhost:8000"
+    const apiUrl = process.env.REACT_APP_API_URL;
     const endpoint = `${apiUrl}/api/product-from-barcode/`;
     fetch(endpoint, {
       method: 'POST',

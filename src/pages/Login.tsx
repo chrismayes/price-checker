@@ -9,6 +9,7 @@ import {
   Alert,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
 import SignupModal from '../modals/SignupModal';
 import ForgotPasswordModal from '../modals/ForgotPasswordModal';
@@ -22,9 +23,11 @@ const Login: React.FC = () => {
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [forgotModalOpen, setForgotModalOpen] = useState(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
       const response = await fetch(`${apiUrl}/api/token/`, {
@@ -41,6 +44,8 @@ const Login: React.FC = () => {
       window.location.href = '/';
     } catch (error: any) {
       setError(error.message || 'Login failed');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -84,8 +89,16 @@ const Login: React.FC = () => {
             ),
           }}
         />
-        <Button variant="contained" color="primary" type="submit" sx={{ mt: 2 }} fullWidth>
-          Login
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          sx={{ mt: 2 }}
+          disabled={isSubmitting}
+          startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
+        >
+          {isSubmitting ? 'Logging in...' : 'Login'}
         </Button>
       </form>
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>

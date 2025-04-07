@@ -27,8 +27,6 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  // Retrieve and decode token if available
   const token = localStorage.getItem('access_token');
   let firstName: string | null = null;
   if (token) {
