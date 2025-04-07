@@ -15,15 +15,47 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import StoreIcon from '@mui/icons-material/Store';
 import JoinModal from '../modals/JoinModal';
+import { jwtDecode } from 'jwt-decode';
+
+interface TokenPayload {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
 
 const Home: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const token = localStorage.getItem('access_token');
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  let firstName: string | null = null;
+  if (token) {
+    try {
+      const decoded = jwtDecode(token) as TokenPayload;
+      firstName = decoded.first_name || decoded.username;
+    } catch (error) {
+      console.error('Token decode error:', error);
+    }
+  }
+
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
+      {token ? (
+        <HomeContentLoggedIn firstName={firstName} />
+      ) : (
+        <HomeContentLoggedOut handleOpen={handleOpen} />
+      )}
+      <JoinModal open={open} onClose={handleClose} />
+    </Container>
+  );
+};
+
+const HomeContentLoggedOut: React.FC<{ handleOpen: () => void }> = ({ handleOpen }) => {
+  return (
+    <>
       <Typography variant="h4" component="h1" gutterBottom>
         Welcome to Grocery Price Checker
       </Typography>
@@ -90,9 +122,43 @@ const Home: React.FC = () => {
           <ListItemText primary="After your shopping trip, compare your total expenditure with what it would have cost at other stores in your account." />
         </ListItem>
       </List>
+    </>
+  );
+};
 
-      <JoinModal open={open} onClose={handleClose} />
-    </Container>
+const HomeContentLoggedIn: React.FC<{ firstName: string | null }> = ({ firstName }) => {
+  return (
+    <>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Welcome Back{firstName ? `, ${firstName}` : ''}!
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        Here is your personalized dashboard. You can manage your shopping lists, track your spending, and explore the latest deals.
+      </Typography>
+      <Typography variant="h5" component="h2" gutterBottom sx={{ mt: 4 }}>
+        Quick Actions
+      </Typography>
+      <List>
+        <ListItem>
+          <ListItemIcon>
+            <ListAltIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="View and manage your shopping lists." />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <TrendingUpIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Track your spending trends over time." />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <SearchIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Search for new grocery items and add them to your collection." />
+        </ListItem>
+      </List>
+    </>
   );
 };
 
