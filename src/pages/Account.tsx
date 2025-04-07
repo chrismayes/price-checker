@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Paper, Box } from '@mui/material';
+import { Container, Typography, Box } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 
 interface TokenPayload {
