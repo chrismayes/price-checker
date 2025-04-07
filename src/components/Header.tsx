@@ -8,6 +8,7 @@ import {
   Box,
   useTheme,
   useMediaQuery,
+  Link,
 } from '@mui/material';
 import BreadcrumbsNav from './BreadcrumbsNav';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
@@ -90,6 +91,23 @@ const Header: React.FC = () => {
               <LogoutIcon />
             </IconButton>
           </Box>
+        )}
+        {!token && (
+          <Link
+            component={RouterLink}
+            to="/login"
+            color="inherit"
+            underline="hover"
+            sx={{ textDecoration: 'none' }}
+          >
+            <Typography
+              variant="body2"
+              color="inherit"
+              sx={{ fontSize: 'inherit' }}
+            >
+              Login
+            </Typography>
+          </Link>
         )}
       </Toolbar>
     </AppBar>

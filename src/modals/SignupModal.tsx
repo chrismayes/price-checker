@@ -135,7 +135,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
             </Alert>
           )}
           {success ? (
-            // If signup is successful, show a close button.
             <Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>
               Close
             </Button>
