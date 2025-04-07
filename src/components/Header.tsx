@@ -41,8 +41,9 @@ const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    window.dispatchEvent(new Event('authChange'));
+    window.dispatchEvent(new Event('authChange')); // Notify other components of the logout
     navigate('/');
+    window.location.reload();
   };
 
   return (
