@@ -13,7 +13,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CameraAltIcon from '@mui/icons-material/CameraAlt'; // Icon for scanning barcodes
 import PriceCheckIcon from '@mui/icons-material/PriceCheck'; // Icon for scanning price tags
-import CompareIcon from '@mui/icons-material/Compare'; // Icon for comparing expenditures
+import StoreIcon from '@mui/icons-material/Store'; // Icon for supermarket comparison
 import JoinModal from '../modals/JoinModal'; // Import the new modal
 
 const Home: React.FC = () => {
@@ -85,9 +85,9 @@ const Home: React.FC = () => {
         </ListItem>
         <ListItem>
           <ListItemIcon>
-            <CompareIcon fontSize="small" />
+            <StoreIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="After your shopping trip, compare your total expenditure to what it would have cost at other stores in your account." />
+          <ListItemText primary="After your shopping trip, compare your total expenditure with what it would have cost at other stores in your account." />
         </ListItem>
       </List>
 

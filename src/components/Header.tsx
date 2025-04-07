@@ -44,7 +44,7 @@ const Header: React.FC = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
     window.dispatchEvent(new Event('authChange'));
-    navigate('/login');
+    navigate('/');
   };
 
   return (
