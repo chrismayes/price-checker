@@ -8,12 +8,16 @@ import {
   ListItemIcon,
   Box,
 } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import StoreIcon from '@mui/icons-material/Store';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import JoinModal from '../modals/JoinModal';
 import { jwtDecode } from 'jwt-decode';
 
@@ -139,24 +143,54 @@ const HomeContentLoggedIn: React.FC<{ firstName: string | null }> = ({ firstName
         Quick Actions
       </Typography>
       <List>
-        <ListItem>
+        <ListItemButton component={RouterLink} to="/stores">
+          <ListItemIcon>
+            <StoreIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <>
+                <strong>Stores:</strong> Set up the stores and supermarkets you shop at.
+              </>
+            }
+          />
+        </ListItemButton>
+        <ListItemButton component={RouterLink} to="/groceries">
+          <ListItemIcon>
+            <ShoppingCartIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <>
+                <strong>Groceries:</strong> Manage groceries in your database.
+              </>
+            }
+          />
+        </ListItemButton>
+        <ListItemButton component={RouterLink} to="/shopping-lists">
           <ListItemIcon>
             <ListAltIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="View and manage your shopping lists." />
-        </ListItem>
-        <ListItem>
+          <ListItemText
+            primary={
+              <>
+                <strong>Shopping Lists:</strong> Create and review your shopping lists.
+              </>
+            }
+          />
+        </ListItemButton>
+        <ListItemButton component={RouterLink} to="/going-shopping">
           <ListItemIcon>
-            <TrendingUpIcon fontSize="small" />
+            <ShoppingBagIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Track your spending trends over time." />
-        </ListItem>
-        <ListItem>
-          <ListItemIcon>
-            <SearchIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Search for new grocery items and add them to your collection." />
-        </ListItem>
+          <ListItemText
+            primary={
+              <>
+                <strong>Going Shopping:</strong> I'm now headed out to the store to shop.
+              </>
+            }
+          />
+        </ListItemButton>
       </List>
     </>
   );
