@@ -52,7 +52,7 @@ const Header: React.FC = () => {
         <Box sx={{ display: 'flex', alignItems: 'center', mr: isMobile ? 0 : 1 }}>
           <RouterLink to="/">
             <img
-              src="/images/logo.png"
+              src={`${process.env.REACT_APP_IMAGES_URL}/logo.png`}
               alt="Logo"
               style={isMobile ? { height: '100%', maxHeight: '70px', objectFit: 'contain' } :
                                 { height: '100%', maxHeight: '100px', objectFit: 'contain' }}
