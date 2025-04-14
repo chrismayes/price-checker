@@ -5,6 +5,22 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './App.css';
 
+const fontsUrl = process.env.REACT_APP_FONTS_URL;
+
+const fontFaceStyles = `
+@font-face {
+  font-family: 'Lobster Two';
+  src: url("${fontsUrl}/LobsterTwo-Italic.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+`;
+
+const styleEl = document.createElement('style');
+styleEl.type = 'text/css';
+styleEl.appendChild(document.createTextNode(fontFaceStyles));
+document.head.appendChild(styleEl);
+
 const theme = createTheme({
   palette: {
     primary: {
