@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Container, Typography, CircularProgress, Alert, Box } from '@mui/material';
-import BreadcrumbsNav from '../components/BreadcrumbsNav';
+import { Container, Typography, CircularProgress, Alert, Box, Link } from '@mui/material';
 import { useBreadcrumb } from '../components/BreadcrumbContext';
 
 interface Store {
@@ -104,7 +103,10 @@ const ViewStore: React.FC = () => {
       )}
       {store.website && (
         <Typography variant="body1" gutterBottom>
-          <strong>Website:</strong> <a href={store.website} target="_blank" rel="noopener noreferrer">{store.website}</a>
+          <strong>Website: </strong>
+          <Link href={store.website} target="_blank" rel="noopener noreferrer" underline="hover">
+            {store.website}
+          </Link>
         </Typography>
       )}
       {store.description && (
