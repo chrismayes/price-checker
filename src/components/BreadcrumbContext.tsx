@@ -6,11 +6,11 @@ interface BreadcrumbContextType {
   setOverrideLabel: (value?: string) => void;
 }
 
-const BreadcrumbContext = createContext<BreadcrumbContextType | undefined>(undefined);
-
 interface BreadcrumbProviderProps {
   children: ReactNode;
 }
+
+const BreadcrumbContext = createContext<BreadcrumbContextType | undefined>(undefined);
 
 export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({ children }) => {
   const [overrideLabel, setOverrideLabel] = useState<string | undefined>(undefined);

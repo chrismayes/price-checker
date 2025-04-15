@@ -2,7 +2,6 @@ import { render, screen, fireEvent, waitFor, within } from '@testing-library/rea
 import { renderWithProviders } from '../test-utils';
 import Login from '../pages/Login';
 
-// Mock react-router-dom
 jest.mock('react-router-dom', () => {
   const actualRrd = jest.requireActual('react-router-dom');
   return {

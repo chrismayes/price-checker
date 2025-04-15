@@ -12,9 +12,7 @@ const Footer: React.FC = () => {
     const handleAuthChange = () => {
       setIsAuthenticated(Boolean(localStorage.getItem('access_token')));
     };
-
     window.addEventListener('authChange', handleAuthChange);
-
     return () => {
       window.removeEventListener('authChange', handleAuthChange);
     };
@@ -23,10 +21,7 @@ const Footer: React.FC = () => {
   return (
     <Box
       component="footer"
-      sx={{
-        py: 3,
-        px: 2,
-        mt: 'auto',
+      sx={{py: 3, px: 2, mt: 'auto',
         backgroundColor: (theme) =>
           theme.palette.mode === 'light'
             ? theme.palette.grey[200]

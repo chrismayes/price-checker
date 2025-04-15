@@ -36,3 +36,14 @@ html, body {
 .no-focus-outline:focus {
   outline: none;
 }
+
+.modal-outer-container {
+  position: 'absolute';
+  top: '50%';
+  left: '50%';
+  transform: 'translate(-50%, -50%)';
+  width: 'calc(100% - 1rem)';
+  max-width: 600;
+  max-height: '90vh';
+  overflow-y: 'auto';
+}
