@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, Typography, Link } from '@mui/material';
+import { Box, Container, Typography, Link, useTheme } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Footer: React.FC = () => {
+  const theme = useTheme();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
     Boolean(localStorage.getItem('access_token'))
   );
@@ -38,14 +39,14 @@ const Footer: React.FC = () => {
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           {isAuthenticated && (
-            <Link component={RouterLink} to="/account" sx={{ mx: 1 }}>
+            <Link component={RouterLink} to="/account" sx={{ mx: 1, color: theme.palette.text.primary }}>
               Account
             </Link>
           )}
-          <Link component={RouterLink} to="/about" sx={{ mx: 1 }}>
+          <Link component={RouterLink} to="/about" sx={{ mx: 1, color: theme.palette.text.primary }}>
             About
           </Link>
-          <Link component={RouterLink} to="/contact" sx={{ mx: 1 }}>
+          <Link component={RouterLink} to="/contact" sx={{ mx: 1, color: theme.palette.text.primary}}>
             Contact Us
           </Link>
         </Box>

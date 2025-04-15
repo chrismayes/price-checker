@@ -8,6 +8,7 @@ import {
   Button,
   Alert,
   CircularProgress,
+  useTheme
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { jwtDecode } from 'jwt-decode';
@@ -32,6 +33,7 @@ const ContactUs: React.FC = () => {
   const siteKey = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
 
   const navigate = useNavigate();
+  const theme = useTheme();
 
   // Prefill fields if the user is logged in
   useEffect(() => {
@@ -170,7 +172,9 @@ const ContactUs: React.FC = () => {
           />
           <Box sx={{ mt: 2, mb: 2 }}>
             <ReCAPTCHA
+              key={theme.palette.mode}
               sitekey={siteKey}
+              theme={theme.palette.mode}
               onChange={(token) => setRecaptchaToken(token)}
               onExpired={() => setRecaptchaToken(null)}
             />
