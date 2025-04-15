@@ -46,7 +46,6 @@ const ViewStore: React.FC = () => {
 
         const data = await response.json();
         setStore(data);
-        // Set the friendly label (override) for the breadcrumbs.
         setOverrideLabel(data.name);
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching store details.');
@@ -80,7 +79,6 @@ const ViewStore: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <BreadcrumbsNav />
       <Typography variant="h4" component="h1" gutterBottom>
         {store.name}
       </Typography>
