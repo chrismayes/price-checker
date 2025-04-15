@@ -36,19 +36,14 @@ const App: React.FC = () => {
       <CssBaseline />
       <BreadcrumbProvider>
         <Header toggleTheme={toggleTheme} currentMode={mode} onLogout={handleLogoutAlert} />
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box>
           <Box sx={{ flexGrow: 1, mb: 5 }}>
             <AppRoutes />
           </Box>
-          <Footer />
         </Box>
+        <Footer />
       </BreadcrumbProvider>
-      <Snackbar
-        open={logoutAlertOpen}
-        autoHideDuration={5000}
-        onClose={() => setLogoutAlertOpen(false)}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
+      <Snackbar open={logoutAlertOpen} autoHideDuration={5000} onClose={() => setLogoutAlertOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={() => setLogoutAlertOpen(false)} severity="info" sx={{ width: '100%' }}>
           You have been logged out.
         </Alert>
