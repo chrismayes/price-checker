@@ -4,6 +4,7 @@ import {
   TextField, Button, Container, Typography, InputAdornment,
   IconButton, Alert,
 } from '@mui/material';
+import { apiFetch } from '../apiFetch';
 
 // Icons
 import Visibility from '@mui/icons-material/Visibility';
@@ -56,23 +57,24 @@ const ResetPasswordForm: React.FC = () => {
 
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
-      const response = await fetch(`${apiUrl}/api/reset-password/`, {
+      const data = await apiFetch(`${apiUrl}/api/reset-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ uid, token, new_password: newPassword }),
       });
-      const data = await response.json();
-      if (response.ok) {
-        setFeedback({ message: data.message || 'Password reset successfully.', severity: 'success' });
-        setNewPassword('');
-        setConfirmPassword('');
-        (document.activeElement as HTMLElement)?.blur();
-        setResetSuccessful(true);
-      } else {
-        setFeedback({ message: data.error || 'Password reset failed.', severity: 'error' });
-      }
+      setFeedback({
+        message: data.message || 'Password reset successfully.',
+        severity: 'success',
+      });
+      setNewPassword('');
+      setConfirmPassword('');
+      (document.activeElement as HTMLElement)?.blur();
+      setResetSuccessful(true);
     } catch (err: any) {
-      setFeedback({ message: err.message || 'An error occurred.', severity: 'error' });
+      setFeedback({
+        message: err.message || 'Password reset failed.',
+        severity: 'error',
+      });
     }
   };
 

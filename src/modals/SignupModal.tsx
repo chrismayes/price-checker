@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, Alert, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import ModalWrapper from '../components/ModalWrapper';
+import { apiFetch } from '../apiFetch';
 
 // Icons
 import Visibility from '@mui/icons-material/Visibility';
@@ -44,23 +45,21 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    setIsSubmitting(true);
 
+    // Client‑side validations
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
-      setIsSubmitting(false);
       return;
     }
-
-    if (!/^[a-zA-Z0-9]+$/.test(username)) { // Check that the username is only alphanumeric.
+    if (!/^[a-zA-Z0-9]+$/.test(username)) {
       setError('Username can only contain alphanumeric characters.');
-      setIsSubmitting(false);
       return;
     }
 
+    setIsSubmitting(true);
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
-      const response = await fetch(`${apiUrl}/api/signup/`, {
+      await apiFetch(`${apiUrl}/api/signup/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -71,25 +70,6 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
           password,
         }),
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        let errorMessage = "Signup failed.";
-        if (data && typeof data === "object") {
-          errorMessage = Object.entries(data)
-            .map(([field, errors]) => {
-              if (Array.isArray(errors)) {
-                return `${field}: ${errors.join(" ")}`;
-              }
-              return `${field}: ${errors}`;
-            })
-            .join(" | ");
-        }
-        setError(errorMessage);
-        setIsSubmitting(false);
-        return;
-      }
-
       setSuccess('Signup successful! A confirmation email has been sent. Please verify your email before logging in.');
     } catch (err: any) {
       setError(err.message || 'Signup failed due to network error.');

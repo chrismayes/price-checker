@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Typography, CircularProgress, Alert, Box, Link } from '@mui/material';
 import { useBreadcrumb } from '../components/BreadcrumbContext';
+import { apiFetch } from '../apiFetch';
 
 interface Store {
   id: number;
@@ -33,15 +34,7 @@ const ViewStore: React.FC = () => {
   useEffect(() => {
     const fetchStore = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/shops/${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch store details. Please try again later.');
-        }
-        const data = await response.json();
+        const data = await apiFetch(`${apiUrl}/api/shops/${id}`);
         setStore(data);
         setOverrideLabel(data.name);
       } catch (err: any) {

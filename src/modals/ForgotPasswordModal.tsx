@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
 import ModalWrapper from '../components/ModalWrapper';
+import { apiFetch } from '../apiFetch';
 
 interface ForgotPasswordModalProps {
   open: boolean;
@@ -52,36 +53,19 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
     e.preventDefault();
     setFeedback(null);
     setIsSubmitting(true);
-
     try {
-      const response = await fetch(`${apiUrl}/api/forgot-password/`, {
+      const data = await apiFetch(`${apiUrl}/api/forgot-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        let errorMessage = 'Request failed.';
-        if (data && typeof data === 'object') {
-          errorMessage = Object.entries(data)
-            .map(([field, errors]) => {
-              if (Array.isArray(errors)) {
-                return `${field}: ${errors.join(' ')}`;
-              }
-              return `${field}: ${errors}`;
-            })
-            .join(' | ');
-        }
-        setFeedback({ type: 'error', text: errorMessage });
-      } else {
-        setFeedback({
-          type: 'success',
-          text: data.message || 'Password reset instructions have been sent to your email.',
-        });
-        startCooldown();
-      }
-    } catch (error: any) {
-      setFeedback({ type: 'error', text: error.message || 'Network error.' });
+      setFeedback({
+        type: 'success',
+        text: data.message || 'Password reset instructions have been sent to your email.',
+      });
+      startCooldown();
+    } catch (err: any) {
+      setFeedback({ type: 'error', text: err.message || 'Network error.' });
     } finally {
       setIsSubmitting(false);
     }

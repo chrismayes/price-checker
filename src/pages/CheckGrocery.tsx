@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Container, Typography, Button, Box } from '@mui/material';
 import Quagga from '@ericblade/quagga2';
 import ScanModal from '../modals/ScanModal';
+import { apiFetch } from '../apiFetch';
 
 const CheckGrocery: React.FC = () => {
   const videoRef = useRef<HTMLDivElement>(null);
@@ -16,7 +17,6 @@ const CheckGrocery: React.FC = () => {
   // Initialize Quagga2 and attach to the video container
   const initQuagga = useCallback(() => {
     if (videoRef.current) {
-      console.log('Initializing Quagga2...');
       Quagga.init(
         {
           inputStream: {
@@ -39,7 +39,6 @@ const CheckGrocery: React.FC = () => {
           }
           quaggaStarted.current = true;
           Quagga.start();
-          console.log('Quagga2 started, scanning...');
           setTimeout(() => {
             const videoElem = videoRef.current?.querySelector('video');
             if (videoElem) {
@@ -60,7 +59,6 @@ const CheckGrocery: React.FC = () => {
             ean_8_reader: 'EAN-8',
           };
           const friendlyReader = readerMapping[format] || format;
-          console.log('Barcode detected:', detectedCode, 'using', friendlyReader);
           setBarcode(detectedCode);
           setReaderType(friendlyReader);
           hasDetected.current = true;
@@ -89,7 +87,6 @@ const CheckGrocery: React.FC = () => {
     if (quaggaStarted.current) {
       try {
         Quagga.stop();
-        console.log('Quagga2 stopped due to cancellation');
       } catch (err) {
         console.warn('Error stopping Quagga2:', err);
       }
@@ -100,28 +97,19 @@ const CheckGrocery: React.FC = () => {
   };
 
   // Fetch product data from the Django API using the scanned barcode
-  const fetchProductData = (barcodeValue: string) => {
+  const fetchProductData = async (barcodeValue: string) => {
     const apiUrl = process.env.REACT_APP_API_URL;
-    const endpoint = `${apiUrl}/api/product-from-barcode/`;
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ barcode_number: barcodeValue }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch product data (status ${response.status})`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log('Product data:', data);
-        setProductData(data);
-      })
-      .catch((err) => {
-        console.error('Error fetching product data:', err);
-        setError('Error fetching product data');
+    try {
+      const data = await apiFetch(`${apiUrl}/api/product-from-barcode/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ barcode_number: barcodeValue }),
       });
+      setProductData(data);
+    } catch (err: any) {
+      console.error('Error fetching product data:', err);
+      setError('Error fetching product data');
+    }
   };
 
   useEffect(() => {

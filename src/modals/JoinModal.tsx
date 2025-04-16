@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
 import ModalWrapper from '../components/ModalWrapper';
+import { apiFetch } from '../apiFetch';
 
 interface JoinModalProps {
   open: boolean;
@@ -29,28 +30,18 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
     setError(null);
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${apiUrl}/api/email-list/`, {
+      await apiFetch(`${apiUrl}/api/email-list/`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: firstName,
           email,
           origin: 'app completion notification form',
         }),
       });
-
-      if (response.ok) {
-        setSuccess(true);
-      } else {
-        const errorData = await response.json();
-        const errorMessage =
-          errorData.email?.[0] || errorData.name?.[0] || 'An error occurred while submitting the form.';
-        setError(errorMessage);
-      }
-    } catch (error) {
-      setError('Signup failed due to a network error.');
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message || 'Signup failed due to a network error.');
     } finally {
       setIsSubmitting(false);
     }

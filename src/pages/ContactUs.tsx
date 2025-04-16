@@ -6,6 +6,7 @@ import {
 import ReCAPTCHA from 'react-google-recaptcha';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import { apiFetch } from '../apiFetch';
 
 interface DecodedToken {
   first_name: string;
@@ -29,18 +30,12 @@ const ContactUs: React.FC = () => {
   // Prefill fields if the user is logged in
   useEffect(() => {
     const token = localStorage.getItem('access_token');
-    console.log('Token from localStorage:', token);
     if (token) {
-      try {
-        // Cast jwtDecode to a callable function.
-        const decodeFn = jwtDecode as unknown as (token: string) => DecodedToken;
-        const decoded: DecodedToken = decodeFn(token);
-        console.log('Decoded token:', decoded);
-        setName(`${decoded.first_name} ${decoded.last_name}`);
-        setEmail(decoded.email);
-      } catch (error) {
-        console.error('Failed to decode token:', error);
-      }
+      // Cast jwtDecode to a callable function.
+      const decodeFn = jwtDecode as unknown as (token: string) => DecodedToken;
+      const decoded: DecodedToken = decodeFn(token);
+      setName(`${decoded.first_name} ${decoded.last_name}`);
+      setEmail(decoded.email);
     }
   }, []);
 
@@ -57,35 +52,18 @@ const ContactUs: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`${apiUrl}/api/contact-us/`, {
+      const data = await apiFetch(`${apiUrl}/api/contact-us/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, subject, message, recaptchaToken }),
       });
-      const data = await response.json();
-      if (!response.ok) {
-        let errorMessage = 'Submission failed.';
-        if (data && typeof data === 'object') {
-          errorMessage = Object.entries(data)
-            .map(([field, errors]) => {
-              if (Array.isArray(errors)) {
-                return `${field}: ${errors.join(' ')}`;
-              }
-              return `${field}: ${errors}`;
-            })
-            .join(' | ');
-        }
-        setFeedback({ type: 'error', text: errorMessage });
-        window.scrollTo(0, 0);
-      } else {
-        setFeedback({ type: 'success', text: data.message || 'Message sent successfully!' });
-        window.scrollTo(0, 0);
-        setSubject('');
-        setMessage('');
-        setRecaptchaToken(null);
-      }
-    } catch (error: any) {
-      setFeedback({ type: 'error', text: error.message || 'Submission failed due to network error.' });
+      setFeedback({ type: 'success', text: data.message || 'Message sent successfully!' });
+      window.scrollTo(0, 0);
+      setSubject('');
+      setMessage('');
+      setRecaptchaToken(null);
+    } catch (err: any) {
+      setFeedback({ type: 'error', text: err.message || 'Submission failed due to network error.' });
       window.scrollTo(0, 0);
     } finally {
       setIsSubmitting(false);
@@ -100,9 +78,7 @@ const ContactUs: React.FC = () => {
     setRecaptchaToken(null);
   };
 
-  const handleCancel = () => {
-    navigate('/');
-  };
+  const handleCancel = () => { navigate('/') };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>

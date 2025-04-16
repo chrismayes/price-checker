@@ -30,12 +30,8 @@ const Home: React.FC = () => {
 
   let firstName: string | null = null;
   if (token) {
-    try {
-      const decoded = jwtDecode(token) as TokenPayload;
-      firstName = decoded.first_name || decoded.username;
-    } catch (error) {
-      console.error('Token decode error:', error);
-    }
+    const decoded = jwtDecode(token) as TokenPayload;
+    firstName = decoded.first_name || decoded.username;
   }
 
   return (

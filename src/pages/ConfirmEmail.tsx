@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, CircularProgress, Button, Alert } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { apiFetch } from '../apiFetch';
 
 const ConfirmEmail: React.FC = () => {
   const location = useLocation();
@@ -19,33 +20,25 @@ const ConfirmEmail: React.FC = () => {
       if (!uid || !token) {
         setError('Invalid confirmation link.');
         setLoading(false);
+        setIsSubmitting(false);
         return;
       }
-
       try {
         const apiUrl = process.env.REACT_APP_API_URL;
-        const response = await fetch(`${apiUrl}/api/confirm-email/`, {
+        const data = await apiFetch(`${apiUrl}/api/confirm-email/`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ uid, token }),
         });
-        const data = await response.json();
-
-        if (!response.ok) {
-          setError(data.error || 'Email confirmation failed.');
-        } else {
-          setFeedback(data.message || 'Email confirmed. You can now log in.');
-          setSuccess(true);
-        }
+        setFeedback(data.message || 'Email confirmed. You can now log in.');
+        setSuccess(true);
       } catch (err: any) {
         setError(err.message || 'An error occurred while confirming your email.');
+      } finally {
+        setLoading(false);
+        setIsSubmitting(false);
       }
-      setLoading(false);
-      setIsSubmitting(false);
     };
-
     confirmEmail();
   }, [uid, token]);
 

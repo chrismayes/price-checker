@@ -5,12 +5,15 @@ import {
 } from '@mui/material';
 import SignupModal from '../modals/SignupModal';
 import ForgotPasswordModal from '../modals/ForgotPasswordModal';
+import { useLocation } from 'react-router-dom';
+import { apiFetch } from '../apiFetch';
 
 // icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login: React.FC = () => {
+  const location = useLocation();
   const [identifier, setIdentifier] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -19,25 +22,24 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const params = new URLSearchParams(location.search);
+  const message = params.get('message');
+
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
-      const response = await fetch(`${apiUrl}/api/token/`, {
+      const data = await apiFetch(`${apiUrl}/api/token/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: identifier, password }),
       });
-      if (!response.ok) {
-        throw new Error('Invalid credentials');
-      }
-      const data = await response.json();
       localStorage.setItem('access_token', data.access);
       localStorage.setItem('refresh_token', data.refresh);
       window.location.href = '/';
-    } catch (error: any) {
-      setError(error.message || 'Login failed');
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
     } finally {
       setIsSubmitting(false);
     }
@@ -45,14 +47,11 @@ const Login: React.FC = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
+      <Typography variant="h4" gutterBottom>Login</Typography>
+
+      {message === 'token_expired' && (<Alert severity="warning" sx={{ mb: 2 }}>Your session has expired. Please log in again.</Alert>)}
+      {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
+
       <form onSubmit={handleLogin}>
         <TextField
           label="Username or Email"

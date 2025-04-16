@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { apiFetch } from '../apiFetch';
 
 const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -26,21 +27,12 @@ const ResetPassword: React.FC = () => {
     const uid = searchParams.get('uid');
     const token = searchParams.get('token');
     const apiUrl = process.env.REACT_APP_API_URL;
-
     try {
-      const response = await fetch(`${apiUrl}/api/reset-password/`, {
+      await apiFetch(`${apiUrl}/api/reset-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ uid, token, new_password: password }),
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        setError(data.error || 'Password reset failed.');
-        setIsSubmitting(false);
-        return;
-      }
-
       setSuccess('Password reset successfully! You can now log in with your new password.');
       setTimeout(() => navigate('/login'), 3000);
     } catch (err: any) {

@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { formatAddress } from '../utils/addressUtils';
+import { apiFetch } from '../apiFetch';
 
 interface Store {
   id: number;
@@ -30,18 +31,11 @@ const Stores: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const apiUrl = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/shops`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch shops. Please try again later.');
-        }
-        const data = await response.json();
+        const data = await apiFetch(`${apiUrl}/api/shops`);
         setStores(data);
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching shops.');
@@ -68,7 +62,9 @@ const Stores: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography variant="h4" component="h1" gutterBottom>Manage Your Stores</Typography>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Manage Your Stores
+      </Typography>
       <Typography variant="body1" gutterBottom>
         Here you can set up and manage the stores and supermarkets you shop at. Add new stores, update their details, and organize your shopping preferences.
       </Typography>

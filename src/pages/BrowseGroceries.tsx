@@ -6,6 +6,7 @@ import {
 import ViewGroceryModal, { Grocery } from '../modals/ViewGroceryModal';
 import AddGroceryModal from '../modals/AddGroceryModal';
 import DeleteConfirmationModal from '../modals/DeleteConfirmationModal';
+import { apiFetch } from '../apiFetch';
 
 // Icons
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,9 +36,7 @@ const BrowseGroceries: React.FC = () => {
   const fetchGroceries = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/groceries/`);
-      if (!response.ok) throw new Error('Failed to fetch groceries');
-      const data = await response.json();
+      const data = await apiFetch(`${apiUrl}/api/groceries/`);
       setGroceries(data);
     } catch (error) {
       console.error('Error fetching groceries:', error);
@@ -63,12 +62,11 @@ const BrowseGroceries: React.FC = () => {
 
   const handleAddGrocery = async () => {
     try {
-      const response = await fetch(`${apiUrl}/api/groceries/`, {
+      await apiFetch(`${apiUrl}/api/groceries/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...newGrocery, manually_entered: true }),
       });
-      if (!response.ok) throw new Error('Failed to add grocery');
       closeAddModal();
       await fetchGroceries();
     } catch (error) {
@@ -88,12 +86,11 @@ const BrowseGroceries: React.FC = () => {
   const confirmDeleteGrocery = async () => {
     if (groceryToDelete !== null) {
       try {
-        const response = await fetch(`${apiUrl}/api/groceries/${groceryToDelete}/`, {
+        await apiFetch(`${apiUrl}/api/groceries/${groceryToDelete}/`, {
           method: 'DELETE',
         });
-        if (!response.ok) throw new Error('Failed to delete grocery');
         await fetchGroceries();
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error deleting grocery:', error);
       } finally {
         closeDeleteModal();

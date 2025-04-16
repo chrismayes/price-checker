@@ -12,13 +12,7 @@ interface TokenPayload {
 const Account: React.FC = () => {
   const token = localStorage.getItem('access_token');
   let payload: TokenPayload | null = null;
-  try {
-    if (token) {
-      payload = jwtDecode<TokenPayload>(token);
-    }
-  } catch (error) {
-    console.error('Failed to decode token', error);
-  }
+  if (token) { payload = jwtDecode<TokenPayload>(token); }
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
