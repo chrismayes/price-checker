@@ -1,8 +1,8 @@
 import { createTheme, Theme } from '@mui/material/styles';
 
 // Theme configuration for light and dark modes
-export const getTheme = (mode: 'light' | 'dark'): Theme =>
-  createTheme({
+export const getTheme = (mode: 'light' | 'dark'): Theme => {
+  const base = createTheme({
     palette: {
       mode,
       primary: {
@@ -27,3 +27,31 @@ export const getTheme = (mode: 'light' | 'dark'): Theme =>
       },
     },
   });
+
+  return createTheme(base, {
+    components: {
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: {
+            '& input:-webkit-autofill': {
+              WebkitTextFillColor: base.palette.text.primary,
+              WebkitBoxShadow: `0 0 0px 1000px ${base.palette.background.paper} inset`,
+              transition: 'background-color 5000s ease-in-out 0s', // remove flicker
+            },
+          },
+        },
+      },
+      MuiFilledInput: {
+        styleOverrides: {
+          root: {
+            '& input:-webkit-autofill': {
+              WebkitTextFillColor: base.palette.text.primary,
+              WebkitBoxShadow: `0 0 0px 1000px ${base.palette.background.paper} inset`,
+              transition: 'background-color 5000s ease-in-out 0s', // remove flicker
+            },
+          },
+        },
+      },
+    },
+  });
+};
