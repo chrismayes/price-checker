@@ -1,3 +1,5 @@
+// This file contains dummy data for stores, used for testing
+
 export interface Store {
   id: number;
   name: string;

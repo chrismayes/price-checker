@@ -16,10 +16,11 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  // Ref for the timer to clear it when needed
+  // Ref for the cooldown timer to allow clearing it when needed.
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
+    // Reset modal state when it is closed.
     if (!open) {
       setEmail('');
       setFeedback(null);
@@ -32,12 +33,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
     }
   }, [open]);
 
-  // Start the cooldown timer for 30 seconds
+  // Start the cooldown timer for 30 seconds. Stops the user from requesting too many reset emails.
   const startCooldown = () => {
     setCooldown(30);
     setRequestSent(true);
     timerRef.current = setInterval(() => {
-      setCooldown(prev => {
+      setCooldown((prev) => {
         if (prev <= 1) {
           if (timerRef.current) {
             clearInterval(timerRef.current);
@@ -49,10 +50,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
     }, 1000);
   };
 
+  // Handle form submission to send the password reset request.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFeedback(null);
     setIsSubmitting(true);
+
     try {
       const data = await apiFetch(`${apiUrl}/api/forgot-password/`, {
         method: 'POST',
@@ -63,7 +66,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
         type: 'success',
         text: data.message || 'Password reset instructions have been sent to your email.',
       });
-      startCooldown();
+      startCooldown(); // Start the cooldown timer after a successful request.
     } catch (err: any) {
       setFeedback({ type: 'error', text: err.message || 'Network error.' });
     } finally {
@@ -73,17 +76,10 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
 
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <Typography variant="h5" gutterBottom>
-        Forgot Password
-      </Typography>
-      <Typography variant="body1" sx={{ mb: 2 }}>
-        Enter your email address below and we'll send you instructions to reset your password.
-      </Typography>
-      {feedback && (
-        <Alert severity={feedback.type} sx={{ mb: 2 }}>
-          {feedback.text}
-        </Alert>
-      )}
+      <Typography variant="h5" gutterBottom>Forgot Password</Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>Enter your email address below and we'll send you instructions to reset your password.</Typography>
+      { feedback && (<Alert severity={feedback.type} sx={{ mb: 2 }}>{feedback.text}</Alert>) }
+
       <Box component="form" onSubmit={handleSubmit}>
         <TextField
           label="Email"
@@ -102,10 +98,12 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
           type="submit"
           fullWidth
           sx={{ mt: 2 }}
-          disabled={isSubmitting || cooldown > 0}
+          disabled={isSubmitting || cooldown > 0} // Disable the button during submission or cooldown.
           startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
         >
-          {isSubmitting ? 'Submitting...' : cooldown > 0
+          {isSubmitting
+            ? 'Submitting...'
+            : cooldown > 0
             ? `Send Reset Instructions Again (${cooldown})`
             : 'Send Reset Instructions'}
         </Button>
@@ -115,9 +113,7 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
           fullWidth
           sx={{ mt: 2 }}
           onClick={onClose}
-        >
-          {requestSent ? 'Done' : 'Cancel'}
-        </Button>
+        >{requestSent ? 'Done' : 'Cancel'}</Button>
       </Box>
     </ModalWrapper>
   );

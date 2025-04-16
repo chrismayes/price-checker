@@ -18,7 +18,7 @@ import ScrollToTop from './components/ScrollToTop';
 const AppRoutes: React.FC = () => {
   return (
     <>
-      <ScrollToTop />
+      <ScrollToTop />{/* Forces new pages to render with the page scrolled to the top */}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />

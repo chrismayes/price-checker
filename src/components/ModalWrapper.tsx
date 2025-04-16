@@ -7,11 +7,12 @@ interface ModalWrapperProps {
   children: React.ReactNode;
 }
 
+// A standardized wrapper component for modals
 const ModalWrapper: React.FC<ModalWrapperProps> = ({ open, onClose, children }) => {
   return (
     <Modal open={open} onClose={onClose} role="dialog">
       <div className="thin-scrollbar no-focus-outline modal-outer-container">
-        <Box className="modal-inner-container" sx={{bgcolor: 'background.paper'}}>
+        <Box className="modal-inner-container" sx={{ bgcolor: 'background.paper' }}>
           {children}
         </Box>
       </div>

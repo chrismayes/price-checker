@@ -20,14 +20,15 @@ const BreadcrumbsNav: React.FC = () => {
     const isLast = index === pathnames.length - 1;
 
     if (isLast) {
+      // If it's the last breadcrumb, display the override label or capitalize the value.
       if (overrideLabel) {
         breadcrumbs.push(
           <Typography key={to} style={{ color: theme.palette.text.secondary }}>
             {overrideLabel}
           </Typography>
         );
-      } else if (/^\d+$/.test(value)) { // If no override is set and the segment is numeric, skip rendering it.
-        return;
+      } else if (/^\d+$/.test(value)) {
+        return; // Skip numeric segments if no override is set.
       } else {
         breadcrumbs.push(
           <Typography key={to} style={{ color: theme.palette.text.secondary }}>
@@ -36,6 +37,7 @@ const BreadcrumbsNav: React.FC = () => {
         );
       }
     } else {
+      // Add intermediate breadcrumbs as links.
       breadcrumbs.push(
         <Link key={to} component={RouterLink} underline="hover" to={to} style={{ color: theme.palette.text.secondary }}>
           {value.charAt(0).toUpperCase() + value.slice(1)}

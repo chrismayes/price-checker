@@ -8,11 +8,8 @@ interface DeleteConfirmationModalProps {
   onConfirm: () => void;
 }
 
-const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
-  open,
-  onClose,
-  onConfirm,
-}) => {
+// A modal to confirm deletion of a Grocery item
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({open, onClose, onConfirm}) => {
   return (
     <ModalWrapper open={open} onClose={onClose}>
       <Typography variant="h6" gutterBottom>Confirm Delete</Typography>

@@ -15,6 +15,7 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Reset modal state and close it.
   const handleClose = () => {
     setFirstName('');
     setEmail('');
@@ -25,6 +26,8 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
   };
 
   const apiUrl = process.env.REACT_APP_API_URL;
+
+  // Handle form submission to join the email list.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
@@ -36,7 +39,7 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
         body: JSON.stringify({
           name: firstName,
           email,
-          origin: 'app completion notification form',
+          origin: 'app completion notification form', // Indicates the source of the submission.
         }),
       });
       setSuccess(true);
@@ -56,24 +59,17 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
       )}
       {success ? (
         <>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Thank you!
-          </Typography>
-          <Typography variant="body1" gutterBottom>
-            You will be notified when the app goes live.
-          </Typography>
-          <Button variant="contained" color="primary" onClick={handleClose} fullWidth sx={{ mt: 2 }}>
-            Close
-          </Button>
+          <Typography variant="h6" component="h2" gutterBottom>Thank you!</Typography>
+          <Typography variant="body1" gutterBottom>You will be notified when the app goes live.</Typography>
+          <Button variant="contained" color="primary" onClick={handleClose} fullWidth sx={{ mt: 2 }}>Close</Button>
         </>
       ) : (
         <form onSubmit={handleSubmit}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Be the First to Know!
-          </Typography>
+          <Typography variant="h6" component="h2" gutterBottom>Be the First to Know!</Typography>
           <Typography variant="body1" gutterBottom>
             The site is still under development. If you'd like to be the first to be notified when the app goes live, please leave your name and email address.
           </Typography>
+
           <TextField
             label="First Name"
             variant="outlined"
@@ -103,14 +99,12 @@ const JoinModal: React.FC<JoinModalProps> = ({ open, onClose }) => {
             type="submit"
             fullWidth
             sx={{ mt: 2 }}
-            disabled={isSubmitting}
+            disabled={isSubmitting} // Disable the button while submitting.
             startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
           >
             {isSubmitting ? 'Submitting...' : 'Submit'}
           </Button>
-          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleClose}>
-            Cancel
-          </Button>
+          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleClose}>Cancel</Button>
         </form>
       )}
     </ModalWrapper>

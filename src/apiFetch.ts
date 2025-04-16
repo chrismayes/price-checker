@@ -45,6 +45,7 @@ export const apiFetch = async (url: string, options: RequestInit = {}): Promise<
         msg.message && msg.message.toLowerCase().includes('token is expired')
       )
     ) {
+      // If they do then force logout and redirect to login page.
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       window.location.href = '/login?message=token_expired';

@@ -19,6 +19,7 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({ open, onClose, handle
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Reset modal state and close it.
   const handleClose = () => {
     setName('');
     setCategory('');
@@ -34,6 +35,7 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({ open, onClose, handle
     setError(null);
     setIsSubmitting(true);
 
+    // Validate that the name field is not empty.
     if (!name.trim()) {
       setError('Name is required.');
       setIsSubmitting(false);
@@ -41,8 +43,8 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({ open, onClose, handle
     }
 
     try {
-      handleAddGrocery();
-      handleClose();
+      handleAddGrocery(); // Call the function to add the grocery.
+      handleClose(); // Close the modal after successful submission.
     } catch (err: any) {
       setError(err.message || 'Failed to add grocery.');
     } finally {
@@ -52,14 +54,8 @@ const AddGroceryModal: React.FC<AddGroceryModalProps> = ({ open, onClose, handle
 
   return (
     <ModalWrapper open={open} onClose={handleClose}>
-      <Typography variant="h6" gutterBottom>
-        Add Grocery
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
+      <Typography variant="h6" gutterBottom>Add Grocery</Typography>
+      {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
       <form onSubmit={handleSubmit}>
         <TextField
           label="Name"

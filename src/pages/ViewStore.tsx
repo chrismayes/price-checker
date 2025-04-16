@@ -36,7 +36,7 @@ const ViewStore: React.FC = () => {
       try {
         const data = await apiFetch(`${apiUrl}/api/shops/${id}`);
         setStore(data);
-        setOverrideLabel(data.name);
+        setOverrideLabel(data.name); // Update the breadcrumb label with the store name.
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching store details.');
       } finally {
@@ -63,6 +63,7 @@ const ViewStore: React.FC = () => {
       </Container>
     );
   }
+
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
       <Typography variant="h4" component="h1" gutterBottom>{store.name}</Typography>

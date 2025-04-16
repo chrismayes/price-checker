@@ -11,7 +11,7 @@ import {
   useTheme,
   useMediaQuery,
   Link,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import { jwtDecode } from 'jwt-decode';
 
@@ -42,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({ toggleTheme, currentMode, onLogout }) =
   const [firstName, setFirstName] = useState<string | null>(null);
 
   useEffect(() => {
+    // Listen for authentication changes (e.g., login/logout).
     const handleAuthChange = () => {
       setToken(localStorage.getItem('access_token'));
     };
@@ -52,11 +53,16 @@ const Header: React.FC<HeaderProps> = ({ toggleTheme, currentMode, onLogout }) =
   }, []);
 
   useEffect(() => {
-    if (!token) { setFirstName(null); return; }
+    // Decode the token to extract the user's first name or username.
+    if (!token) {
+      setFirstName(null);
+      return;
+    }
     try {
       const decoded = jwtDecode<TokenPayload>(token);
       setFirstName(decoded.first_name || decoded.username);
     } catch (err) {
+      // Handle invalid or expired token by logging the user out.
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       window.dispatchEvent(new Event('authChange'));
@@ -88,6 +94,7 @@ const Header: React.FC<HeaderProps> = ({ toggleTheme, currentMode, onLogout }) =
   );
 };
 
+// Component for the header banner, including the logo and title.
 const HeaderBanner: React.FC<{
   isMobile: boolean;
   currentMode: 'light' | 'dark';
@@ -98,15 +105,13 @@ const HeaderBanner: React.FC<{
       sx={{
         justifyContent: 'flex-start',
         backgroundColor: theme.palette.background.default,
-        paddingLeft: '0 !important'
+        paddingLeft: '0 !important',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', mr: isMobile ? 0 : 1 }}>
         <RouterLink to="/">
           <img
-            src={`${process.env.REACT_APP_IMAGES_URL}${
-              currentMode === 'dark' ? '/dark' : ''
-            }/logo.png`}
+            src={`${process.env.REACT_APP_IMAGES_URL}${currentMode === 'dark' ? '/dark' : ''}/logo.png`}
             alt="Logo"
             style={
               isMobile
@@ -123,10 +128,8 @@ const HeaderBanner: React.FC<{
         sx={(theme) => ({
           fontFamily: '"Lobster Two", cursive',
           textShadow: `${
-            currentMode === 'dark'
-              ? theme.palette.grey[800]
-              : theme.palette.grey[200]
-          } 4px 4px`
+            currentMode === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200]
+          } 4px 4px`,
         })}
       >
         Grocery Price Checker
@@ -135,6 +138,7 @@ const HeaderBanner: React.FC<{
   );
 };
 
+// Component for the header toolbar, including breadcrumbs, account actions, and theme toggle.
 const HeaderToolbar: React.FC<{
   toggleTheme: () => void;
   currentMode: 'light' | 'dark';
@@ -142,14 +146,7 @@ const HeaderToolbar: React.FC<{
   token?: string;
   firstName?: string;
   isMobile: boolean;
-}> = ({
-  toggleTheme,
-  currentMode,
-  onLogout,
-  token,
-  firstName,
-  isMobile
-}) => (
+}> = ({ toggleTheme, currentMode, onLogout, token, firstName, isMobile }) => (
   <Toolbar variant="dense" sx={{ justifyContent: 'space-between' }}>
     <BreadcrumbsNav />
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -164,11 +161,10 @@ const HeaderToolbar: React.FC<{
                 textTransform: 'none',
                 display: 'flex',
                 alignItems: 'center',
-                mr: 1
+                mr: 1,
               }}
             >
-              <PersonIcon sx={{ mr: isMobile ? 0 : 0.5 }} />{' '}
-              {!isMobile && firstName}
+              <PersonIcon sx={{ mr: isMobile ? 0 : 0.5 }} /> {!isMobile && firstName}
             </Button>
           </Tooltip>
           <Tooltip title="Logout" arrow>
@@ -191,11 +187,7 @@ const HeaderToolbar: React.FC<{
         </Link>
       )}
       <Tooltip
-        title={
-          currentMode === 'dark'
-            ? 'Switch to light mode'
-            : 'Switch to dark mode'
-        }
+        title={currentMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
         arrow
       >
         <IconButton onClick={toggleTheme} color="inherit" sx={{ ml: 1 }}>

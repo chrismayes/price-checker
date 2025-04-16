@@ -18,7 +18,7 @@ export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({ children
 
   useEffect(() => {
     setOverrideLabel(undefined);
-  }, [location.pathname]);
+  }, [location.pathname]); // Reset the override label whenever the route changes.
 
   return (
     <BreadcrumbContext.Provider value={{ overrideLabel, setOverrideLabel }}>
@@ -27,9 +27,11 @@ export const BreadcrumbProvider: React.FC<BreadcrumbProviderProps> = ({ children
   );
 };
 
+// Hook to access the breadcrumb context.
 export const useBreadcrumb = (): BreadcrumbContextType => {
   const context = useContext(BreadcrumbContext);
   if (!context) {
+    // Throw an error if the hook is used outside of the BreadcrumbProvider.
     throw new Error('useBreadcrumb must be used within a BreadcrumbProvider');
   }
   return context;

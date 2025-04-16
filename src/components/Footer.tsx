@@ -9,6 +9,7 @@ const Footer: React.FC = () => {
   );
 
   useEffect(() => {
+    // Listen for authentication changes (e.g., login/logout).
     const handleAuthChange = () => {
       setIsAuthenticated(Boolean(localStorage.getItem('access_token')));
     };
@@ -21,11 +22,11 @@ const Footer: React.FC = () => {
   return (
     <Box
       component="footer"
-      sx={{py: 3, px: 2, mt: 'auto',
+      sx={{ py: 3, px: 2, mt: 'auto',
         backgroundColor: (theme) =>
           theme.palette.mode === 'light'
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
+            ? theme.palette.grey[200] // Light mode background color.
+            : theme.palette.grey[800], // Dark mode background color.
       }}
     >
       <Container maxWidth="md">
@@ -34,14 +35,26 @@ const Footer: React.FC = () => {
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
           {isAuthenticated && (
-            <Link component={RouterLink} to="/account" sx={{ mx: 1, color: theme.palette.text.primary }}>
+            <Link
+              component={RouterLink}
+              to="/account"
+              sx={{ mx: 1, color: theme.palette.text.primary }}
+            >
               Account
             </Link>
           )}
-          <Link component={RouterLink} to="/about" sx={{ mx: 1, color: theme.palette.text.primary }}>
+          <Link
+            component={RouterLink}
+            to="/about"
+            sx={{ mx: 1, color: theme.palette.text.primary }}
+          >
             About
           </Link>
-          <Link component={RouterLink} to="/contact" sx={{ mx: 1, color: theme.palette.text.primary}}>
+          <Link
+            component={RouterLink}
+            to="/contact"
+            sx={{ mx: 1, color: theme.palette.text.primary }}
+          >
             Contact Us
           </Link>
         </Box>

@@ -6,6 +6,8 @@ import './App.css';
 
 const fontsUrl = process.env.REACT_APP_FONTS_URL;
 
+// Define custom font-face styles for the application
+// These fonts are here to allow env vars to be used in their URL for CDN deployment
 const fontFaceStyles = `
 @font-face {
   font-family: 'Lobster Two';
@@ -15,22 +17,22 @@ const fontFaceStyles = `
 }
 `;
 
+// Dynamically inject the font-face styles into the document's head
 const styleEl = document.createElement('style');
 styleEl.type = 'text/css';
 styleEl.appendChild(document.createTextNode(fontFaceStyles));
 document.head.appendChild(styleEl);
 
-const container = document.getElementById('root');
-
+const container = document.getElementById('root'); // Get the root element where the app will be rendered
 if (!container) {
   throw new Error('Failed to find the root element');
 }
 
-const root = ReactDOM.createRoot(container);
+const root = ReactDOM.createRoot(container); // Create a React root for rendering the app
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App />
+    <BrowserRouter> {/* Enables routing for the application */}
+      <App /> {/* Main application component */}
     </BrowserRouter>
   </React.StrictMode>
 );

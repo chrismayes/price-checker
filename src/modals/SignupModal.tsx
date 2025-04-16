@@ -21,11 +21,12 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility.
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State to toggle confirm password visibility.
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    // Reset modal state when it is closed.
     if (!open) {
       setUsername('');
       setEmail('');
@@ -41,12 +42,13 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
     }
   }, [open]);
 
+  // Handle form submission for signing up.
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
-    // Client‑side validations
+    // Client-side validations.
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
@@ -83,7 +85,9 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
       <Typography variant="h5" gutterBottom>Sign Up</Typography>
       {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
       {success && (<Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>)}
-      {success ? (<Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>Close</Button>) : (
+      {success ? (
+        <Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>Close</Button>
+      ) : (
         <form onSubmit={handleSignup}>
           <TextField
             label="Username"

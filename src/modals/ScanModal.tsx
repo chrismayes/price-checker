@@ -14,16 +14,9 @@ const ScanModal: React.FC<ScanModalProps> = ({ open, onClose, videoRef }) => {
       <Box
         ref={videoRef}
         className="videoContainer"
-        sx={{
-          width: '95%',
-          height: '45vh',
-          margin: 'auto',
-          overflow: 'hidden',
-        }}
+        sx={{width: '95%', height: '45vh', margin: 'auto', overflow: 'hidden',}}
       />
-      <Button variant="outlined" color="info" fullWidth onClick={onClose} sx={{ my: 1 }}>
-        Cancel Scanning
-      </Button>
+      <Button variant="outlined" color="info" fullWidth onClick={onClose} sx={{ my: 1 }}>Cancel Scanning</Button>
     </ModalWrapper>
   );
 };
