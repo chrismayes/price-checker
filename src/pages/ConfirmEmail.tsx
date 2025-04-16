@@ -41,7 +41,7 @@ const ConfirmEmail: React.FC = () => {
       }
     };
     confirmEmail();
-  }, [uid, token]); // Re-run the effect when UID or token changes
+  }, [uid, token, apiUrl]); // Re-run the effect when UID or token changes
 
   const handleGoToLogin = () => {
     navigate('/login');
