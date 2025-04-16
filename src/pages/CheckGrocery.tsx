@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Container, Typography, Button, Box } from '@mui/material';
 import Quagga from '@ericblade/quagga2';
-import './CheckGrocery.css';
 import ScanModal from '../modals/ScanModal';
 
 const CheckGrocery: React.FC = () => {

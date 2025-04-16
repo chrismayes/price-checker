@@ -10,6 +10,7 @@ html, body {
   margin: 0;
 }
 
+/* Scrollbars (start) */
 .thin-scrollbar {
   overflow-y: auto;
 }
@@ -27,16 +28,15 @@ html, body {
   border-radius: none;
 }
 
-/* Firefox */
+  /* Firefox */
 .thin-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
 }
+/* Scrollbars (end) */
 
-.no-focus-outline:focus {
-  outline: none;
-}
 
+/* Modals (start) */
 .modal-outer-container {
   position: absolute;
   top: 50%;
@@ -53,4 +53,26 @@ html, body {
   padding: 1.2rem;
   box-shadow: 1rem;
   border-radius: 0.5rem;
+}
+/* Modals (end) */
+
+
+/* Scanner (start) */
+.videoContainer {
+  width: 100%;
+  height: 50vh;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .videoContainer {
+    height: 30vh;
+  }
+}
+/* Scanner (end) */
+
+
+/* Misc */
+.no-focus-outline:focus {
+  outline: none;
 }
