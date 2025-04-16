@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Typography,
-  TextField,
-  List,
-  ListItemButton,
-  ListItemText,
-  CircularProgress,
-  Alert,
+  Container, Typography, TextField, List, ListItemButton,
+  ListItemText, CircularProgress, Alert,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { formatAddress } from '../utils/addressUtils';
@@ -35,9 +29,7 @@ const Stores: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
   const apiUrl = process.env.REACT_APP_API_URL;
-
   useEffect(() => {
     const fetchStores = async () => {
       try {
@@ -46,11 +38,9 @@ const Stores: React.FC = () => {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
         });
-
         if (!response.ok) {
           throw new Error('Failed to fetch shops. Please try again later.');
         }
-
         const data = await response.json();
         setStores(data);
       } catch (err: any) {
@@ -59,7 +49,6 @@ const Stores: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchStores();
   }, [apiUrl]);
 
@@ -79,13 +68,10 @@ const Stores: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Manage Your Stores
-      </Typography>
+      <Typography variant="h4" component="h1" gutterBottom>Manage Your Stores</Typography>
       <Typography variant="body1" gutterBottom>
         Here you can set up and manage the stores and supermarkets you shop at. Add new stores, update their details, and organize your shopping preferences.
       </Typography>
-
       <TextField
         label="Search Stores"
         variant="outlined"
@@ -94,22 +80,12 @@ const Stores: React.FC = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-
       {loading && <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />}
-
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-
       <List>
         {filteredStores.map((store) => (
-          <ListItemButton
-            key={store.id}
-            component={RouterLink}
-            to={`/stores/${store.id}`}
-          >
-            <ListItemText
-              primary={store.name}
-              secondary={`${formatAddress(store)} | ${store.phone_number}`}
-            />
+          <ListItemButton key={store.id} component={RouterLink} to={`/stores/${store.id}`}>
+            <ListItemText primary={store.name} secondary={`${formatAddress(store)} | ${store.phone_number}`} />
           </ListItemButton>
         ))}
       </List>

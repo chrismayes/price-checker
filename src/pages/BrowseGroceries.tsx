@@ -3,10 +3,12 @@ import {
   Container, Typography, List, ListItem, ListItemText, CircularProgress,
   Avatar, ListItemAvatar, Button, Grid, IconButton
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ViewGroceryModal, { Grocery } from '../modals/ViewGroceryModal';
 import AddGroceryModal from '../modals/AddGroceryModal';
 import DeleteConfirmationModal from '../modals/DeleteConfirmationModal';
+
+// Icons
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const BrowseGroceries: React.FC = () => {
   const [groceries, setGroceries] = useState<Grocery[]>([]);
@@ -44,9 +46,7 @@ const BrowseGroceries: React.FC = () => {
     }
   }, [apiUrl]);
 
-  useEffect(() => {
-    fetchGroceries();
-  }, [fetchGroceries]);
+  useEffect(() => {fetchGroceries()}, [fetchGroceries]);
 
   const openViewModal = (grocery: Grocery) => {
     setSelectedGrocery(grocery);
@@ -128,12 +128,8 @@ const BrowseGroceries: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Grid container justifyContent="space-between" alignItems="center">
-        <Typography variant="h3" component="h1" gutterBottom>
-          Browse Groceries
-        </Typography>
-        <Button variant="contained" color="primary" onClick={openAddModal}>
-          Add Grocery
-        </Button>
+        <Typography variant="h3" component="h1" gutterBottom>Browse Groceries</Typography>
+        <Button variant="contained" color="primary" onClick={openAddModal}>Add Grocery</Button>
       </Grid>
 
       {loading ? (

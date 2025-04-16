@@ -52,18 +52,12 @@ const ResetPassword: React.FC = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 5 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Reset Password
-      </Typography>
+      <Typography variant="h4" component="h1" gutterBottom>Reset Password</Typography>
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
+        <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
       )}
       {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {success}
-        </Alert>
+        <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>
       )}
       <form onSubmit={handleSubmit}>
         <TextField

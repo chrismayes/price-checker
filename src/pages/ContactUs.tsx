@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Container,
-  Typography,
-  Paper,
-  Box,
-  TextField,
-  Button,
-  Alert,
-  CircularProgress,
-  useTheme
+  Container, Typography, Paper, Box, TextField, Button,
+  Alert, CircularProgress, useTheme
 } from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { jwtDecode } from 'jwt-decode';
@@ -28,10 +21,8 @@ const ContactUs: React.FC = () => {
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const apiUrl = process.env.REACT_APP_API_URL;
   const siteKey = process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY;
-
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -71,9 +62,7 @@ const ContactUs: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, subject, message, recaptchaToken }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         let errorMessage = 'Submission failed.';
         if (data && typeof data === 'object') {
@@ -118,16 +107,12 @@ const ContactUs: React.FC = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Paper sx={{ p: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Contact Us
-        </Typography>
+        <Typography variant="h4" gutterBottom>Contact Us</Typography>
         <Typography variant="body1" sx={{ mb: 2 }}>
           Have a question or feedback? Please fill out the form below and we'll get back to you as soon as possible.
         </Typography>
         {feedback && (
-          <Alert severity={feedback.type} sx={{ mb: 2 }}>
-            {feedback.text}
-          </Alert>
+          <Alert severity={feedback.type} sx={{ mb: 2 }}>{feedback.text}</Alert>
         )}
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
@@ -191,12 +176,8 @@ const ContactUs: React.FC = () => {
             {isSubmitting ? 'Submitting...' : 'Send Message'}
           </Button>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2, gap: 1 }}>
-            <Button variant="outlined" onClick={handleClear} color="warning" sx={{ flex: 1 }}>
-              Clear Form
-            </Button>
-            <Button variant="outlined" onClick={handleCancel} sx={{ flex: 1 }}>
-              Cancel
-            </Button>
+            <Button variant="outlined" onClick={handleClear} color="warning" sx={{ flex: 1 }}>Clear Form</Button>
+            <Button variant="outlined" onClick={handleCancel} sx={{ flex: 1 }}>Cancel</Button>
           </Box>
         </Box>
       </Paper>

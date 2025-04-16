@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import BreadcrumbsNav from './BreadcrumbsNav';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
+import {
+  AppBar, Toolbar, Typography, IconButton, Button,
+  Box, useTheme, useMediaQuery, Link, Tooltip
+} from '@mui/material';
+import { jwtDecode } from 'jwt-decode';
+
+// Icons
 import LogoutIcon from '@mui/icons-material/Logout';
 import PersonIcon from '@mui/icons-material/Person';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import {AppBar, Toolbar, Typography, IconButton, Button, Box, useTheme, useMediaQuery, Link,Tooltip} from '@mui/material';
-import { jwtDecode } from 'jwt-decode';
 
 interface TokenPayload {
   username: string;
@@ -25,8 +30,18 @@ const Header: React.FC<HeaderProps> = ({ toggleTheme, currentMode, onLogout }) =
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [token, setToken] = useState<string | null>(localStorage.getItem('access_token'));
 
-  const token = localStorage.getItem('access_token');
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setToken(localStorage.getItem('access_token'));
+    };
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
+  }, []);
+
   let firstName: string | null = null;
   if (token) {
     try {
@@ -37,13 +52,21 @@ const Header: React.FC<HeaderProps> = ({ toggleTheme, currentMode, onLogout }) =
     }
   }
 
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    window.dispatchEvent(new Event('authChange'));
+    navigate('/');
+    onLogout();
+  };
+
   return (
     <AppBar position="static" color="primary">
       <HeaderBanner isMobile={isMobile} currentMode={currentMode} />
       <HeaderToolbar
         toggleTheme={toggleTheme}
         currentMode={currentMode}
-        onLogout={onLogout}
+        onLogout={handleLogout}
         token={token || undefined}
         firstName={firstName || undefined}
         isMobile={isMobile}
@@ -109,7 +132,12 @@ const HeaderToolbar: React.FC<{
                 color="inherit"
                 component={RouterLink}
                 to="/account"
-                sx={{textTransform: 'none', display: 'flex', alignItems: 'center', mr: 1}}
+                sx={{
+                  textTransform: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  mr: 1
+                }}
               >
                 <PersonIcon sx={{ mr: isMobile ? 0 : 0.5 }} /> {!isMobile && firstName}
               </Button>

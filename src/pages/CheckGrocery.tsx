@@ -143,9 +143,7 @@ const CheckGrocery: React.FC = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Typography variant="h3" component="h1" gutterBottom>
-        Check a Grocery
-      </Typography>
+      <Typography variant="h3" component="h1" gutterBottom>Check a Grocery</Typography>
       {barcode && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="h5">Detected Barcode: {barcode}</Typography>
@@ -155,9 +153,7 @@ const CheckGrocery: React.FC = () => {
         </Box>
       )}
       {error && (
-        <Typography variant="body2" color="error" sx={{ mb: 2 }}>
-          {error}
-        </Typography>
+        <Typography variant="body2" color="error" sx={{ mb: 2 }}>{error}</Typography>
       )}
       {productData && productData.products && productData.products.length > 0 && (
         <Box sx={{ mb: 2 }}>

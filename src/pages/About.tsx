@@ -4,9 +4,7 @@ import { Container, Typography, Box } from '@mui/material';
 const About: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography variant="h4" gutterBottom>
-        About Grocery Price Checker
-      </Typography>
+      <Typography variant="h4" gutterBottom>About Grocery Price Checker</Typography>
       <Box sx={{ mt: 2 }}>
         <Typography variant="body1" paragraph>
           Grocery Price Checker is a user-friendly application designed to help you compare prices at your favorite grocery stores. Our platform makes it easy to scan product barcodes and retrieve up-to-date pricing information, helping you make informed decisions and save money.

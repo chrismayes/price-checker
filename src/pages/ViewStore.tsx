@@ -38,11 +38,9 @@ const ViewStore: React.FC = () => {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
           },
         });
-
         if (!response.ok) {
           throw new Error('Failed to fetch store details. Please try again later.');
         }
-
         const data = await response.json();
         setStore(data);
         setOverrideLabel(data.name);
@@ -52,14 +50,12 @@ const ViewStore: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchStore();
   }, [apiUrl, id, setOverrideLabel]);
 
   if (loading) {
     return <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />;
   }
-
   if (error) {
     return (
       <Container maxWidth="md" sx={{ mt: 5 }}>
@@ -67,7 +63,6 @@ const ViewStore: React.FC = () => {
       </Container>
     );
   }
-
   if (!store) {
     return (
       <Container maxWidth="md" sx={{ mt: 5 }}>
@@ -75,12 +70,9 @@ const ViewStore: React.FC = () => {
       </Container>
     );
   }
-
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        {store.name}
-      </Typography>
+      <Typography variant="h4" component="h1" gutterBottom>{store.name}</Typography>
       {store.image_url && (
         <Box
           component="img"
@@ -93,14 +85,8 @@ const ViewStore: React.FC = () => {
         <strong>Address:</strong> {store.address_line1}
         {store.address_line2 && `, ${store.address_line2}`}, {store.city}, {store.state}, {store.postal_code}, {store.country}
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        <strong>Phone:</strong> {store.phone_number}
-      </Typography>
-      {store.email && (
-        <Typography variant="body1" gutterBottom>
-          <strong>Email:</strong> {store.email}
-        </Typography>
-      )}
+      <Typography variant="body1" gutterBottom><strong>Phone:</strong> {store.phone_number}</Typography>
+      {store.email && (<Typography variant="body1" gutterBottom><strong>Email:</strong> {store.email}</Typography>)}
       {store.website && (
         <Typography variant="body1" gutterBottom>
           <strong>Website: </strong>
@@ -109,14 +95,8 @@ const ViewStore: React.FC = () => {
           </Link>
         </Typography>
       )}
-      {store.description && (
-        <Typography variant="body1" gutterBottom>
-          <strong>Description:</strong> {store.description}
-        </Typography>
-      )}
-      <Typography variant="body1" gutterBottom>
-        <strong>Opening Hours:</strong> {store.opening_hours}
-      </Typography>
+      {store.description && (<Typography variant="body1" gutterBottom><strong>Description:</strong> {store.description}</Typography>)}
+      <Typography variant="body1" gutterBottom><strong>Opening Hours:</strong> {store.opening_hours}</Typography>
     </Container>
   );
 };

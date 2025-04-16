@@ -11,7 +11,7 @@ const ModalWrapper: React.FC<ModalWrapperProps> = ({ open, onClose, children }) 
   return (
     <Modal open={open} onClose={onClose} role="dialog">
       <div className="thin-scrollbar no-focus-outline modal-outer-container">
-        <Box sx={{m: 4, p: 3, boxShadow: 24, borderRadius: 2, bgcolor: 'background.paper'}}>
+        <Box className="modal-inner-container" sx={{bgcolor: 'background.paper'}}>
           {children}
         </Box>
       </div>

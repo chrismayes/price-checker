@@ -15,17 +15,11 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
 }) => {
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <Typography variant="h6" gutterBottom>
-        Confirm Delete
-      </Typography>
+      <Typography variant="h6" gutterBottom>Confirm Delete</Typography>
       <Typography>Are you sure you want to delete this grocery?</Typography>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-        <Button variant="outlined" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button variant="contained" color="error" onClick={onConfirm}>
-          Delete
-        </Button>
+        <Button variant="outlined" onClick={onClose}>Cancel</Button>
+        <Button variant="contained" color="error" onClick={onConfirm}>Delete</Button>
       </Box>
     </ModalWrapper>
   );

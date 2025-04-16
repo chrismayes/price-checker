@@ -1,14 +1,11 @@
 import React, { useState, FormEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  TextField,
-  Button,
-  Container,
-  Typography,
-  InputAdornment,
-  IconButton,
-  Alert,
+  TextField, Button, Container, Typography, InputAdornment,
+  IconButton, Alert,
 } from '@mui/material';
+
+// Icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -81,13 +78,9 @@ const ResetPasswordForm: React.FC = () => {
 
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" sx={{ mt: 4 }}>
-        Reset Password
-      </Typography>
+      <Typography variant="h4" sx={{ mt: 4 }}>Reset Password</Typography>
       {feedback && (
-        <Alert severity={feedback.severity} sx={{ mt: 2 }}>
-          {feedback.message}
-        </Alert>
+        <Alert severity={feedback.severity} sx={{ mt: 2 }}>{feedback.message}</Alert>
       )}
       <form onSubmit={handleSubmit}>
         <TextField
@@ -128,24 +121,9 @@ const ResetPasswordForm: React.FC = () => {
             ),
           }}
         />
-        <Button
-          variant="contained"
-          type="submit"
-          fullWidth
-          sx={{ mt: 2 }}
-          disabled={resetSuccessful}
-        >
-          Reset Password
-        </Button>
+        <Button variant="contained" type="submit" fullWidth sx={{ mt: 2 }} disabled={resetSuccessful}>Reset Password</Button>
         {resetSuccessful && (
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ mt: 2 }}
-            onClick={() => navigate('/login')}
-          >
-            Go to Login
-          </Button>
+          <Button variant="contained" fullWidth sx={{ mt: 2 }} onClick={() => navigate('/login')}>Go to Login</Button>
         )}
       </form>
     </Container>

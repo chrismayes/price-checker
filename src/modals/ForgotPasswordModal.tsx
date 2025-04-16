@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Modal, Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
+import { Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material';
+import ModalWrapper from '../components/ModalWrapper';
 
 interface ForgotPasswordModalProps {
   open: boolean;
@@ -87,78 +88,54 @@ const ForgotPasswordModal: React.FC<ForgotPasswordModalProps> = ({ open, onClose
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <div
-        className="thin-scrollbar no-focus-outline"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'calc(100% - 20px)',
-          maxWidth: 600,
-          maxHeight: '90vh',
-          overflowY: 'auto',
-        }}
-      >
-        <Box
-          sx={{
-            m: 4,
-            p: 3,
-            boxShadow: 24,
-            borderRadius: 2,
-            bgcolor: 'background.paper',
-          }}
+    <ModalWrapper open={open} onClose={onClose}>
+      <Typography variant="h5" gutterBottom>
+        Forgot Password
+      </Typography>
+      <Typography variant="body1" sx={{ mb: 2 }}>
+        Enter your email address below and we'll send you instructions to reset your password.
+      </Typography>
+      {feedback && (
+        <Alert severity={feedback.type} sx={{ mb: 2 }}>
+          {feedback.text}
+        </Alert>
+      )}
+      <Box component="form" onSubmit={handleSubmit}>
+        <TextField
+          label="Email"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
+          required
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          fullWidth
+          sx={{ mt: 2 }}
+          disabled={isSubmitting || cooldown > 0}
+          startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
         >
-          <Typography variant="h5" gutterBottom>
-            Forgot Password
-          </Typography>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Enter your email address below and we'll send you instructions to reset your password.
-          </Typography>
-          {feedback && (
-            <Alert severity={feedback.type} sx={{ mb: 2 }}>
-              {feedback.text}
-            </Alert>
-          )}
-          <Box component="form" onSubmit={handleSubmit}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              fullWidth
-              margin="normal"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              inputProps={{ autoCapitalize: 'none', autoCorrect: 'off' }}
-              required
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              fullWidth
-              sx={{ mt: 2 }}
-              disabled={isSubmitting || cooldown > 0}
-              startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
-            >
-              {isSubmitting ? 'Submitting...' : cooldown > 0
-                ? `Send Reset Instructions Again (${cooldown})`
-                : 'Send Reset Instructions'}
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              fullWidth
-              sx={{ mt: 2 }}
-              onClick={onClose}
-            >
-              {requestSent ? 'Done' : 'Cancel'}
-            </Button>
-          </Box>
-        </Box>
-      </div>
-    </Modal>
+          {isSubmitting ? 'Submitting...' : cooldown > 0
+            ? `Send Reset Instructions Again (${cooldown})`
+            : 'Send Reset Instructions'}
+        </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          fullWidth
+          sx={{ mt: 2 }}
+          onClick={onClose}
+        >
+          {requestSent ? 'Done' : 'Cancel'}
+        </Button>
+      </Box>
+    </ModalWrapper>
   );
 };
 

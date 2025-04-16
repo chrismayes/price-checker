@@ -38,12 +38,19 @@ html, body {
 }
 
 .modal-outer-container {
-  position: 'absolute';
-  top: '50%';
-  left: '50%';
-  transform: 'translate(-50%, -50%)';
-  width: 'calc(100% - 1rem)';
-  max-width: 600;
-  max-height: '90vh';
-  overflow-y: 'auto';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 1rem);
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-inner-container {
+  margin: 1rem;
+  padding: 1.2rem;
+  box-shadow: 1rem;
+  border-radius: 0.5rem;
 }

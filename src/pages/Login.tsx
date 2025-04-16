@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Link,
-  Box,
-  Alert,
-  InputAdornment,
-  IconButton,
-  CircularProgress,
+  Container, TextField, Button, Typography, Link,Box,
+  Alert, InputAdornment, IconButton,CircularProgress,
 } from '@mui/material';
 import SignupModal from '../modals/SignupModal';
 import ForgotPasswordModal from '../modals/ForgotPasswordModal';
+
+// icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 

@@ -29,9 +29,7 @@ const ViewGroceryModal: React.FC<ViewGroceryModalProps> = ({ open, onClose, groc
 
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <Typography variant="h5" gutterBottom>
-        {grocery.name}
-      </Typography>
+      <Typography variant="h5" gutterBottom>{grocery.name}</Typography>
       {grocery.image_url && (
         <Box
           component="img"
@@ -41,24 +39,16 @@ const ViewGroceryModal: React.FC<ViewGroceryModalProps> = ({ open, onClose, groc
         />
       )}
       {grocery.description && (
-        <Typography variant="body1" gutterBottom>
-          {grocery.description}
-        </Typography>
+        <Typography variant="body1" gutterBottom>{grocery.description}</Typography>
       )}
       {grocery.category && (
-        <Typography variant="body2" gutterBottom>
-          <strong>Category:</strong> {grocery.category}
-        </Typography>
+        <Typography variant="body2" gutterBottom><strong>Category:</strong> {grocery.category}</Typography>
       )}
       {grocery.brand && (
-        <Typography variant="body2" gutterBottom>
-          <strong>Brand:</strong> {grocery.brand}
-        </Typography>
+        <Typography variant="body2" gutterBottom><strong>Brand:</strong> {grocery.brand}</Typography>
       )}
       {grocery.size && (
-        <Typography variant="body2" gutterBottom>
-          <strong>Size:</strong> {grocery.size}
-        </Typography>
+        <Typography variant="body2" gutterBottom><strong>Size:</strong> {grocery.size}</Typography>
       )}
     </ModalWrapper>
   );

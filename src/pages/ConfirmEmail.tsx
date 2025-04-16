@@ -59,22 +59,14 @@ const ConfirmEmail: React.FC = () => {
         <CircularProgress />
       ) : error ? (
         <>
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-          <Button variant="contained" onClick={handleGoToLogin} sx={{ mt: 2 }}>
-            Go to Login
-          </Button>
+          <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
+          <Button variant="contained" onClick={handleGoToLogin} sx={{ mt: 2 }}>Go to Login</Button>
         </>
       ) : success ? (
-        <Typography variant="h5" gutterBottom>
-          {feedback}
-        </Typography>
+        <Typography variant="h5" gutterBottom>{feedback}</Typography>
       ) : (
         <>
-          <Typography variant="h5" gutterBottom>
-            {feedback}
-          </Typography>
+          <Typography variant="h5" gutterBottom>{feedback}</Typography>
           <Button
             variant="contained"
             onClick={handleGoToLogin}

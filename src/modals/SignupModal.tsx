@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  InputAdornment,
-  IconButton,
-  CircularProgress,
-} from '@mui/material';
+import { Typography, TextField, Button, Alert, InputAdornment, IconButton, CircularProgress } from '@mui/material';
+import ModalWrapper from '../components/ModalWrapper';
+
+// Icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import ModalWrapper from '../components/ModalWrapper';
 
 interface SignupModalProps {
   open: boolean;
@@ -58,8 +52,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
       return;
     }
 
-    // Check that the username is only alphanumeric.
-    if (!/^[a-zA-Z0-9]+$/.test(username)) {
+    if (!/^[a-zA-Z0-9]+$/.test(username)) { // Check that the username is only alphanumeric.
       setError('Username can only contain alphanumeric characters.');
       setIsSubmitting(false);
       return;
@@ -107,24 +100,10 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
 
   return (
     <ModalWrapper open={open} onClose={onClose}>
-      <Typography variant="h5" gutterBottom>
-        Sign Up
-      </Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {success}
-        </Alert>
-      )}
-      {success ? (
-        <Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>
-          Close
-        </Button>
-      ) : (
+      <Typography variant="h5" gutterBottom>Sign Up</Typography>
+      {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
+      {success && (<Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>)}
+      {success ? (<Button variant="contained" color="primary" onClick={onClose} fullWidth sx={{ mt: 2 }}>Close</Button>) : (
         <form onSubmit={handleSignup}>
           <TextField
             label="Username"
@@ -179,10 +158,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
               autoCorrect: 'off',
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowPassword(!showPassword)}
-                    edge="end"
-                  >
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                     {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -203,10 +179,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
               autoCorrect: 'off',
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    edge="end"
-                  >
+                  <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end">
                     {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
@@ -224,9 +197,7 @@ const SignupModal: React.FC<SignupModalProps> = ({ open, onClose }) => {
           >
             {isSubmitting ? 'Submitting...' : 'Sign Up'}
           </Button>
-          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={onClose}>
-            Cancel
-          </Button>
+          <Button variant="outlined" color="primary" fullWidth sx={{ mt: 2 }} onClick={onClose}>Cancel</Button>
         </form>
       )}
     </ModalWrapper>

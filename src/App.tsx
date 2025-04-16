@@ -45,7 +45,7 @@ const App: React.FC = () => {
       </BreadcrumbProvider>
       <Snackbar open={logoutAlertOpen} autoHideDuration={5000} onClose={() => setLogoutAlertOpen(false)} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
         <Alert onClose={() => setLogoutAlertOpen(false)} severity="info" sx={{ width: '100%' }}>
-          You have been logged out.
+          You have been logged out
         </Alert>
       </Snackbar>
     </ThemeProvider>
