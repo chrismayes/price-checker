@@ -30,6 +30,7 @@ export const getTheme = (mode: 'light' | 'dark'): Theme => {
 
   return createTheme(base, {
     components: {
+      // override autofill styles for input fields
       MuiOutlinedInput: {
         styleOverrides: {
           root: {

@@ -19,7 +19,6 @@ const BrowseGroceries: React.FC = () => {
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [groceryToDelete, setGroceryToDelete] = useState<number | null>(null);
-
   const [newGrocery, setNewGrocery] = useState({
     name: '',
     description: '',
@@ -30,9 +29,9 @@ const BrowseGroceries: React.FC = () => {
     store_name: '',
     store_price: '',
   });
+  const apiUrl = process.env.REACT_APP_API_URL; // API base URL from environment variables.
 
-  const apiUrl = process.env.REACT_APP_API_URL;
-
+  // Fetch the list of groceries from the API
   const fetchGroceries = useCallback(async () => {
     setLoading(true);
     try {
@@ -44,22 +43,25 @@ const BrowseGroceries: React.FC = () => {
       setLoading(false);
     }
   }, [apiUrl]);
-
   useEffect(() => {fetchGroceries()}, [fetchGroceries]);
 
+  // Open the view modal for a selected grocery
   const openViewModal = (grocery: Grocery) => {
     setSelectedGrocery(grocery);
     setViewModalOpen(true);
   };
+
   const closeViewModal = () => {
     setSelectedGrocery(null);
     setViewModalOpen(false);
   };
 
+  // Handle input changes for the new grocery form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewGrocery({ ...newGrocery, [e.target.name]: e.target.value });
   };
 
+  // Add a new grocery to the database
   const handleAddGrocery = async () => {
     try {
       await apiFetch(`${apiUrl}/api/groceries/`, {
@@ -68,28 +70,29 @@ const BrowseGroceries: React.FC = () => {
         body: JSON.stringify({ ...newGrocery, manually_entered: true }),
       });
       closeAddModal();
-      await fetchGroceries();
+      await fetchGroceries(); // Refresh the grocery list after adding
     } catch (error) {
       console.error('Error adding grocery:', error);
     }
   };
 
+  // Open the delete modal for a specific grocery
   const openDeleteModal = (id: number) => {
     setGroceryToDelete(id);
     setDeleteModalOpen(true);
   };
+
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
     setGroceryToDelete(null);
   };
 
+  // Confirm and delete a grocery from the database
   const confirmDeleteGrocery = async () => {
     if (groceryToDelete !== null) {
       try {
-        await apiFetch(`${apiUrl}/api/groceries/${groceryToDelete}/`, {
-          method: 'DELETE',
-        });
-        await fetchGroceries();
+        await apiFetch(`${apiUrl}/api/groceries/${groceryToDelete}/`, { method: 'DELETE'});
+        await fetchGroceries(); // Refresh the grocery list after deletion
       } catch (error: any) {
         console.error('Error deleting grocery:', error);
       } finally {
@@ -109,14 +112,17 @@ const BrowseGroceries: React.FC = () => {
     store_price: '',
   };
 
+  // Clear the form fields when adding a new grocery
   const clearFormFields = () => {
     setNewGrocery(initialGroceryState);
   };
 
+  // Open the add modal
   const openAddModal = () => {
     clearFormFields();
     setAddModalOpen(true);
   };
+
   const closeAddModal = () => {
     clearFormFields();
     setAddModalOpen(false);
@@ -129,9 +135,7 @@ const BrowseGroceries: React.FC = () => {
         <Button variant="contained" color="primary" onClick={openAddModal}>Add Grocery</Button>
       </Grid>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
+      {loading ? (<CircularProgress />) : (
         <List>
           {groceries.map((grocery) => (
             <ListItem
@@ -173,6 +177,7 @@ const BrowseGroceries: React.FC = () => {
         </List>
       )}
 
+      {/* Modals for viewing, adding, and deleting groceries */}
       <ViewGroceryModal open={viewModalOpen} onClose={closeViewModal} grocery={selectedGrocery} />
       <AddGroceryModal
         open={addModalOpen}

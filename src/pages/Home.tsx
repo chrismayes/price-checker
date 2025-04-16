@@ -23,19 +23,21 @@ interface TokenPayload {
 }
 
 const Home: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // State to control the JoinModal visibility
   const token = localStorage.getItem('access_token');
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true); // Open the JoinModal
+  const handleClose = () => setOpen(false); // Close the JoinModal
 
   let firstName: string | null = null;
   if (token) {
+    // Decode the token to extract the user's first name or username
     const decoded = jwtDecode(token) as TokenPayload;
     firstName = decoded.first_name || decoded.username;
   }
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
+      {/* Render different content based on whether the user is logged in */}
       {token ? (
         <HomeContentLoggedIn firstName={firstName} />
       ) : (
@@ -46,6 +48,7 @@ const Home: React.FC = () => {
   );
 };
 
+// Component for the home page content when the user is logged out
 const HomeContentLoggedOut: React.FC<{ handleOpen: () => void }> = ({ handleOpen }) => {
   return (
     <>
@@ -107,6 +110,7 @@ const HomeContentLoggedOut: React.FC<{ handleOpen: () => void }> = ({ handleOpen
   );
 };
 
+// Component for the home page content when the user is logged in
 const HomeContentLoggedIn: React.FC<{ firstName: string | null }> = ({ firstName }) => {
   return (
     <>

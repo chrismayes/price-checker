@@ -30,8 +30,8 @@ const Stores: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const apiUrl = process.env.REACT_APP_API_URL;
 
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchStores = async () => {
       try {
@@ -44,9 +44,9 @@ const Stores: React.FC = () => {
       }
     };
     fetchStores();
-  }, [apiUrl]);
+  }, [apiUrl]); // Re-run the effect when the API URL changes.
 
-  // Filter stores based on the searchTerm.
+  // Filter stores based on the search term.
   const filteredStores = stores.filter((store) => {
     const lowerSearch = searchTerm.toLowerCase();
     return (
@@ -62,12 +62,12 @@ const Stores: React.FC = () => {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Manage Your Stores
-      </Typography>
+      <Typography variant="h4" component="h1" gutterBottom>Manage Your Stores</Typography>
       <Typography variant="body1" gutterBottom>
         Here you can set up and manage the stores and supermarkets you shop at. Add new stores, update their details, and organize your shopping preferences.
       </Typography>
+
+      {/* Search bar to filter stores */}
       <TextField
         label="Search Stores"
         variant="outlined"
@@ -76,6 +76,7 @@ const Stores: React.FC = () => {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
+
       {loading && <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <List>

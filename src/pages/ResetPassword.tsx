@@ -5,19 +5,21 @@ import { apiFetch } from '../apiFetch';
 
 const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate(); // Hook to navigate programmatically
 
+  // Handle form submission to reset the password
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
     setIsSubmitting(true);
 
+    // Validate that the passwords match
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       setIsSubmitting(false);
@@ -34,6 +36,7 @@ const ResetPassword: React.FC = () => {
         body: JSON.stringify({ uid, token, new_password: password }),
       });
       setSuccess('Password reset successfully! You can now log in with your new password.');
+      // Redirect to the login page after a short delay
       setTimeout(() => navigate('/login'), 3000);
     } catch (err: any) {
       setError(err.message || 'Password reset failed due to network error.');
@@ -45,12 +48,9 @@ const ResetPassword: React.FC = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 5 }}>
       <Typography variant="h4" component="h1" gutterBottom>Reset Password</Typography>
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>
-      )}
-      {success && (
-        <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>
-      )}
+      {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
+      {success && (<Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>)}
+
       <form onSubmit={handleSubmit}>
         <TextField
           label="New Password"
@@ -78,11 +78,9 @@ const ResetPassword: React.FC = () => {
           type="submit"
           fullWidth
           sx={{ mt: 2 }}
-          disabled={isSubmitting}
+          disabled={isSubmitting} // Disable the button while submitting.
           startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
-        >
-          {isSubmitting ? 'Resetting...' : 'Reset Password'}
-        </Button>
+        >{isSubmitting ? 'Resetting...' : 'Reset Password'}</Button>
       </form>
     </Container>
   );

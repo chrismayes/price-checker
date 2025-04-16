@@ -5,16 +5,16 @@ import ScanModal from '../modals/ScanModal';
 import { apiFetch } from '../apiFetch';
 
 const CheckGrocery: React.FC = () => {
-  const videoRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLDivElement>(null); // Reference to the video container for barcode scanning
   const [barcode, setBarcode] = useState<string>('');
   const [readerType, setReaderType] = useState<string>('');
-  const [scanning, setScanning] = useState(false);
+  const [scanning, setScanning] = useState(false); // State to track if scanning is active
   const [productData, setProductData] = useState<any>(null);
   const [error, setError] = useState<string>('');
   const quaggaStarted = useRef(false);
   const hasDetected = useRef(false);
 
-  // Initialize Quagga2 and attach to the video container
+  // Initialize Quagga2 and attach it to the video container
   const initQuagga = useCallback(() => {
     if (videoRef.current) {
       Quagga.init(
@@ -25,11 +25,11 @@ const CheckGrocery: React.FC = () => {
             constraints: {
               width: { ideal: 640 },
               height: { ideal: 480 },
-              facingMode: 'environment',
+              facingMode: 'environment', // Use the rear camera
             },
           },
           decoder: {
-            readers: ['upc_reader', 'ean_reader'],
+            readers: ['upc_reader', 'ean_reader'], // Supported barcode formats
           },
         },
         (err) => {
@@ -42,13 +42,14 @@ const CheckGrocery: React.FC = () => {
           setTimeout(() => {
             const videoElem = videoRef.current?.querySelector('video');
             if (videoElem) {
-              videoElem.setAttribute('playsinline', 'true');
-              videoElem.setAttribute('muted', 'true');
+              videoElem.setAttribute('playsinline', 'true'); // Ensure the video plays inline
+              videoElem.setAttribute('muted', 'true'); // Mute the video
             }
           }, 500);
         }
       );
 
+      // Handle barcode detection
       Quagga.onDetected((result) => {
         if (!hasDetected.current && result.codeResult && result.codeResult.code) {
           const detectedCode = result.codeResult.code;
@@ -64,7 +65,7 @@ const CheckGrocery: React.FC = () => {
           hasDetected.current = true;
           Quagga.stop();
           setScanning(false);
-          fetchProductData(detectedCode);
+          fetchProductData(detectedCode); // Fetch product data using the detected barcode
         }
       });
     } else {
@@ -72,7 +73,6 @@ const CheckGrocery: React.FC = () => {
     }
   }, []);
 
-  // Start scanning by opening the modal
   const startScanning = () => {
     setBarcode('');
     setReaderType('');
@@ -82,7 +82,6 @@ const CheckGrocery: React.FC = () => {
     setScanning(true);
   };
 
-  // Cancel scanning: stop Quagga2 and close modal
   const cancelScanning = () => {
     if (quaggaStarted.current) {
       try {
@@ -96,7 +95,7 @@ const CheckGrocery: React.FC = () => {
     quaggaStarted.current = false;
   };
 
-  // Fetch product data from the Django API using the scanned barcode
+  // Fetch product data from the API using the barcode
   const fetchProductData = async (barcodeValue: string) => {
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
@@ -113,9 +112,7 @@ const CheckGrocery: React.FC = () => {
   };
 
   useEffect(() => {
-    if (scanning) {
-      initQuagga();
-    }
+    if (scanning) { initQuagga() }
     return () => {
       if (quaggaStarted.current) {
         try {
@@ -124,7 +121,7 @@ const CheckGrocery: React.FC = () => {
           console.warn('Error stopping Quagga2 during cleanup:', err);
         }
       }
-      Quagga.offDetected();
+      Quagga.offDetected(); // Remove the detection listener
     };
   }, [scanning, initQuagga]);
 
@@ -184,9 +181,7 @@ const CheckGrocery: React.FC = () => {
                 {walmartStore && (
                   <Typography variant="body2" sx={{ mt: 1 }}>
                     Price at Walmart Canada on {formatDate(walmartStore.last_update)}:{" "}
-                    <span style={{ fontWeight: "bold", fontSize: "1.25rem" }}>
-                      ${walmartStore.price}
-                    </span>
+                    <span style={{ fontWeight: "bold", fontSize: "1.25rem" }}>${walmartStore.price}</span>
                   </Typography>
                 )}
                 {product.images && product.images.length > 0 && (

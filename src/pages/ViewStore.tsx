@@ -28,15 +28,15 @@ const ViewStore: React.FC = () => {
   const [store, setStore] = useState<Store | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { setOverrideLabel } = useBreadcrumb();
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const { setOverrideLabel } = useBreadcrumb(); // Update the breadcrumb label dynamically
 
+  const apiUrl = process.env.REACT_APP_API_URL;
   useEffect(() => {
     const fetchStore = async () => {
       try {
         const data = await apiFetch(`${apiUrl}/api/shops/${id}`);
         setStore(data);
-        setOverrideLabel(data.name); // Update the breadcrumb label with the store name.
+        setOverrideLabel(data.name); // Set the breadcrumb label to the store name
       } catch (err: any) {
         setError(err.message || 'An error occurred while fetching store details.');
       } finally {
@@ -44,25 +44,11 @@ const ViewStore: React.FC = () => {
       }
     };
     fetchStore();
-  }, [apiUrl, id, setOverrideLabel]);
+  }, [apiUrl, id, setOverrideLabel]); // Re-run the effect when dependencies change
 
-  if (loading) {
-    return <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />;
-  }
-  if (error) {
-    return (
-      <Container maxWidth="md" sx={{ mt: 5 }}>
-        <Alert severity="error">{error}</Alert>
-      </Container>
-    );
-  }
-  if (!store) {
-    return (
-      <Container maxWidth="md" sx={{ mt: 5 }}>
-        <Alert severity="warning">Store not found.</Alert>
-      </Container>
-    );
-  }
+  if (loading) { return <CircularProgress sx={{ display: 'block', margin: '20px auto' }} />; }
+  if (error) { return (<Container maxWidth="md" sx={{ mt: 5 }}><Alert severity="error">{error}</Alert></Container>); }
+  if (!store) { return (<Container maxWidth="md" sx={{ mt: 5 }}><Alert severity="warning">Store not found.</Alert></Container>); }
 
   return (
     <Container maxWidth="md" sx={{ mt: 5 }}>

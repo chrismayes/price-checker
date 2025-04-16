@@ -1,33 +1,35 @@
 import React, { useState } from 'react';
 import {
-  Container, TextField, Button, Typography, Link,Box,
-  Alert, InputAdornment, IconButton,CircularProgress,
+  Container, TextField, Button, Typography, Link, Box,
+  Alert, InputAdornment, IconButton, CircularProgress,
 } from '@mui/material';
 import SignupModal from '../modals/SignupModal';
 import ForgotPasswordModal from '../modals/ForgotPasswordModal';
 import { useLocation } from 'react-router-dom';
 import { apiFetch } from '../apiFetch';
 
-// icons
+// Icons
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login: React.FC = () => {
-  const location = useLocation();
   const [identifier, setIdentifier] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [signupModalOpen, setSignupModalOpen] = useState(false);
-  const [forgotModalOpen, setForgotModalOpen] = useState(false);
-  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [forgotModalOpen, setForgotModalOpen] = useState(false); // State to control the forgot password modal visibility
+  const [showPassword, setShowPassword] = useState<boolean>(false); // State to toggle password visibility
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const params = new URLSearchParams(location.search);
-  const message = params.get('message');
+  const location = useLocation();
+  const params = new URLSearchParams(location.search); // Parse query parameters from the URL
+  const message = params.get('message'); // Extract the "message" query parameter
 
+  // Handle login form submission.
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     const apiUrl = process.env.REACT_APP_API_URL;
     try {
       const data = await apiFetch(`${apiUrl}/api/token/`, {
@@ -35,6 +37,7 @@ const Login: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: identifier, password }),
       });
+      // Save tokens to localStorage and redirect to the home page
       localStorage.setItem('access_token', data.access);
       localStorage.setItem('refresh_token', data.refresh);
       window.location.href = '/';
@@ -48,7 +51,6 @@ const Login: React.FC = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>Login</Typography>
-
       {message === 'token_expired' && (<Alert severity="warning" sx={{ mb: 2 }}>Your session has expired. Please log in again.</Alert>)}
       {error && (<Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>)}
 
@@ -88,20 +90,32 @@ const Login: React.FC = () => {
           type="submit"
           fullWidth
           sx={{ mt: 2 }}
-          disabled={isSubmitting}
+          disabled={isSubmitting} // Disable the button while submitting
           startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
-        >
-          {isSubmitting ? 'Logging in...' : 'Login'}
-        </Button>
+        >{isSubmitting ? 'Logging in...' : 'Login'}</Button>
       </form>
+
+      {/* Links for forgot password and signup */}
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
-        <Link component="button" variant="body2" underline="hover" onClick={() => setForgotModalOpen(true)}>
+        <Link
+          component="button"
+          variant="body2"
+          underline="hover"
+          onClick={() => setForgotModalOpen(true)}
+        >
           Forgot Password?
         </Link>
-        <Link component="button" variant="body2" underline="hover" onClick={() => setSignupModalOpen(true)}>
+        <Link
+          component="button"
+          variant="body2"
+          underline="hover"
+          onClick={() => setSignupModalOpen(true)}
+        >
           Sign Up
         </Link>
       </Box>
+
+      {/* Modals for signup and forgot password */}
       <SignupModal open={signupModalOpen} onClose={() => setSignupModalOpen(false)} />
       <ForgotPasswordModal open={forgotModalOpen} onClose={() => setForgotModalOpen(false)} />
     </Container>

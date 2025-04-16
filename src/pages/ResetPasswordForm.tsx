@@ -16,18 +16,19 @@ const useQuery = (): URLSearchParams => {
 };
 
 const ResetPasswordForm: React.FC = () => {
-  const query = useQuery();
+  const query = useQuery(); // Extract query parameters from the URL
   const uid: string = query.get('uid') || '';
   const token: string = query.get('token') || '';
+
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [feedback, setFeedback] = useState<{ message: string; severity: 'error' | 'success' } | null>(null);
-  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false); // Toggle visibility for the new password
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false); // Toggle visibility for the confirmation password
   const [resetSuccessful, setResetSuccessful] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Navigation hook to redirect the user
 
-  // Validate password restrictions.
+  // Password validation
   const validatePassword = (password: string): string | null => {
     if (password.length < 8) {
       return 'Password must be at least 8 characters long.';
@@ -38,13 +39,14 @@ const ResetPasswordForm: React.FC = () => {
     if (!/[A-Z]/.test(password)) {
       return 'Password must contain at least one uppercase letter.';
     }
-    return null;
+    return null; // Return null if the password passes the validation
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFeedback(null);
 
+    // Validate the new password.
     const pwdError = validatePassword(newPassword);
     if (pwdError) {
       setFeedback({ message: pwdError, severity: 'error' });
@@ -68,7 +70,7 @@ const ResetPasswordForm: React.FC = () => {
       });
       setNewPassword('');
       setConfirmPassword('');
-      (document.activeElement as HTMLElement)?.blur();
+      (document.activeElement as HTMLElement)?.blur(); // Remove focus from the active element
       setResetSuccessful(true);
     } catch (err: any) {
       setFeedback({
@@ -81,13 +83,12 @@ const ResetPasswordForm: React.FC = () => {
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" sx={{ mt: 4 }}>Reset Password</Typography>
-      {feedback && (
-        <Alert severity={feedback.severity} sx={{ mt: 2 }}>{feedback.message}</Alert>
-      )}
+      {feedback && (<Alert severity={feedback.severity} sx={{ mt: 2 }}>{feedback.message}</Alert>)}
+
       <form onSubmit={handleSubmit}>
         <TextField
           label="New Password"
-          type={showNewPassword ? 'text' : 'password'}
+          type={showNewPassword ? 'text' : 'password'} // Toggle password visibility.
           fullWidth
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
@@ -106,7 +107,7 @@ const ResetPasswordForm: React.FC = () => {
         />
         <TextField
           label="Confirm Password"
-          type={showConfirmPassword ? 'text' : 'password'}
+          type={showConfirmPassword ? 'text' : 'password'} // Toggle confirmation password visibility.
           fullWidth
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}

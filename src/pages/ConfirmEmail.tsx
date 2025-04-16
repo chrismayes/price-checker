@@ -4,27 +4,28 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { apiFetch } from '../apiFetch';
 
 const ConfirmEmail: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [feedback, setFeedback] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const query = new URLSearchParams(location.search);
+  const navigate = useNavigate(); // Hook to navigate programmatically
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  const location = useLocation(); // Hook to access the current location (e.g., query parameters)
+  const query = new URLSearchParams(location.search); // Parse query parameters from the URL
   const uid = query.get('uid');
   const token = query.get('token');
 
   useEffect(() => {
     const confirmEmail = async () => {
       if (!uid || !token) {
-        setError('Invalid confirmation link.');
+        setError('Invalid confirmation link.'); // Handle missing UID or token
         setLoading(false);
         setIsSubmitting(false);
         return;
       }
       try {
-        const apiUrl = process.env.REACT_APP_API_URL;
         const data = await apiFetch(`${apiUrl}/api/confirm-email/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -40,7 +41,7 @@ const ConfirmEmail: React.FC = () => {
       }
     };
     confirmEmail();
-  }, [uid, token]);
+  }, [uid, token]); // Re-run the effect when UID or token changes
 
   const handleGoToLogin = () => {
     navigate('/login');
@@ -64,11 +65,9 @@ const ConfirmEmail: React.FC = () => {
             variant="contained"
             onClick={handleGoToLogin}
             sx={{ mt: 2 }}
-            disabled={isSubmitting}
+            disabled={isSubmitting} // Disable the button while submitting
             startIcon={isSubmitting ? <CircularProgress size={20} /> : null}
-          >
-            {isSubmitting ? 'Submitting...' : 'Go to Login'}
-          </Button>
+          >{isSubmitting ? 'Submitting...' : 'Go to Login'}</Button>
         </>
       )}
     </Container>
